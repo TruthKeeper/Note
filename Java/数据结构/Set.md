@@ -12,7 +12,7 @@
 
 ## TreeSet
 
-基于`TreeMap`的原理实现，升序排列，存放基本类型、String以及实现`Comparable`接口的类
+基于`TreeMap`的原理实现，升序排列，存放基本类型、String以及实现`Comparable`接口的类型
 
 
 
