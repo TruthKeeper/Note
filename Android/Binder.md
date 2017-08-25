@@ -7,3 +7,5 @@ Android IPC跨进程通讯的一种机制，实现了IBinder接口，在Framewor
 ![](http://img.blog.csdn.net/20170531235617078?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMTI0MDg3Nw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 其中`Messenger`基于`AIDL`，而`AIDL`称为Android接口描述语言，是基于`Binder`的封装方式来做处理跨进程通信。`Linux`用户进程都有独立空间，且不能直接操作系统内核的空间
+
+`Client`通过获取到IBinder调用 **transact** 函数将方法细节传入，由Binder驱动完成调用，并且会在Binder线程池中执行  **onTransact** 方法，将方法参数传入 `Server` 的函数
