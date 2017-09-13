@@ -6,6 +6,9 @@
 
 HTTP请求中，在应用层中发送端将用户数据发送到传输层，此时拼接上TCP首部，发送到传输层，此时拼接上IP首部，传输到链路层，此时拼接上以太网首部，接收端接收到报文后，反向层层解析
 
+【以太网头【IP头【TCP头【应用层数据】】】】
+
+
 ### Ping
 
 通过IP协议中的ICMP回显请求报文（非UDP）发送给目标主机，检测目标主机是否可以连通，应答返回字节数、反应时间、生存时间
@@ -35,6 +38,8 @@ UDP
 - 在对网络通讯速度有要求的使用
 
 ### TCP 3次握手
+
+![](https://raw.githubusercontent.com/TruthKeeper/Note/master/Http/TCP%E8%BF%9E%E6%8E%A5.jpeg)
 
 ![](https://raw.githubusercontent.com/TruthKeeper/Note/master/Http/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.jpg)
 
