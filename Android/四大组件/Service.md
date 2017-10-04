@@ -12,4 +12,13 @@ Service有两种方式开启，**startService** 和 **bindService** 区别在于
 
 ![](http://images.cnitblog.com/blog/325852/201303/24233205-ccefbc4a326048d79b111d05d1f8ff03.png)
 
-IntentService：带有工作线程的service，原理基于HandlerThread
+**IntentService**：带有工作线程的service，原理基于HandlerThread
+
+### 保活
+
+- `onStartCommand`方法的返回值设置为START_STICKY，在意外停止后会被重启
+- 通过`startForeground`设置为前台进程，且常驻在通知栏
+- 通过多进程Service互相绑定守护
+- AlarmManager不断地唤醒
+- 监听锁屏、解锁，通过1像素的Activity维持前台进程
+- 联系厂商，加入白名单(;¬_¬)
