@@ -28,6 +28,8 @@
   
 - onDestory(activity的)
 
+![](https://user-gold-cdn.xitu.io/2017/10/10/59d579beadc3a3efe65cf8587c9e65c9?imageView2/0/w/1280/h/960/ignore-error/1)
+
 ### 创建方式
 
 - XML中&lt;fragment&gt;标签
@@ -37,7 +39,7 @@
 ### 通信方式
 
 - getArguments：Fragment获取Activity的初始化参数
-- getActivity：Fragment获取Activity示例
+- getActivity：Fragment获取Activity实例，或者用[APT的方式](https://github.com/hongyangAndroid/FABridge)
 - FragmentManager操作Fragment
 
 ### 懒加载
