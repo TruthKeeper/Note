@@ -77,6 +77,35 @@ POST中内容键值对用&拼接，还有文件上传数据等
 - Cookie是保存在客户端的，Session是保存在服务端的
 - Cookie是不安全的，可以被修改，而Session是相对安全的
 
+### 缓存
+
+通常指浏览器、移动端缓存
+
+
+![](https://raw.githubusercontent.com/TruthKeeper/Note/master/Http/HTTP%E7%BC%93%E5%AD%98.png)
+
+
+**Cache-Control**:Request，Response中的头headers：
+
+> 请求Request
+
+- no-cache  客户端不读取缓存，向web服务器重新请求
+- no-store  请求和响应都不读取缓存
+- max-age  max-age=%d  表示请求后%d秒内再次发起请求，不会再去请求服务器
+- max-stale  max-stale=%d  表示如果请求超时了，客户端也可以接收到或者小于%d秒内的响应结果
+
+> 响应Response
+
+- public：表示该响应可以被任何缓存区缓存，通常JS，CSS等一些静态文件都是public的
+- private：表示该响应的缓存是私有的，仅针对某个用户，不能共享
+- no-cache  （建议）不做缓存
+- no-store  （建议）请求和响应都不做缓存
+- max-age=%d  （建议）本次响应的缓存时长
+- max-stale=%d  允许读取时间小于%d秒的缓存
+
+
+
+
 
 
 
