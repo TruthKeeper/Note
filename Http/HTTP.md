@@ -81,9 +81,7 @@ POST中内容键值对用&拼接，还有文件上传数据等
 
 通常指浏览器、移动端缓存
 
-
-![](https://raw.githubusercontent.com/TruthKeeper/Note/master/Http/HTTP%E7%BC%93%E5%AD%98.png)
-
+![](https://raw.githubusercontent.com/TruthKeeper/Note/master/Http/HTTP%E7%BC%93%E5%AD%98.jpg)
 
 **Cache-Control**:Request，Response中的头headers：
 
