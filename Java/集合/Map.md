@@ -30,3 +30,6 @@ JDK 8中对HashMap进行了红黑树的优化，当桶元素大于 **64** ，且
 
 **线程安全** ，与`HashMap`的区别在于哈希算法不同，没有取模运算，没有桶结构的优化，不允许空的KEY和VALUE，而`HashMap`允许
 
+## WeakHashMap
+
+对Key进行弱引用的绑定，而不是Value
