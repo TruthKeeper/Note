@@ -1,0 +1,20 @@
+    static long get1InNumber(long number) {
+        if (number < 1) {
+            return 0;
+        }
+        if (number < 10) {
+            return 1;
+        }
+        //长度
+        long length = Long.toString(number).length();
+        //高位为1时的值
+        long powNumber = (long) Math.pow(10, length - 1);
+        //高位的数值
+        int highNum = (int) (number / powNumber);
+        //高位数值为1时,满足条件的数值数量
+        long highCount = highNum == 1 ? number % powNumber : powNumber + 1;
+        //高位数值非1时,满足条件的数值数量
+        long elseHighCount = highNum * (length - 1) * (powNumber / 10);
+        //递归获取低一位的
+        return highCount + elseHighCount + get1InNumber(number % powNumber);
+    }
