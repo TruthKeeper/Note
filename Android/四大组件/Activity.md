@@ -44,3 +44,23 @@
 其中<action> 定义行为，多个filter只要有一个对应就能匹配到
 </br>
 <category>设置类型，Intent默认带有DEFAULT的类型，在AndroidManifest中要手动添加
+
+### 启动过程
+
+- Activity中最终到startActivityForResult()mMainThread.getApplicationThread()传入了一个ApplicationThread检查APT
+- Instrumentation#execStartActivity()和checkStartActivityResult()，这是在启动了Activity之后判断Activity是否启动成功，例如没有在AM中注册那么就会报错)
+- ActivityManagerNative.getDefault().startActivity()类似AIDL，实现了IAM，实际是由远端的AMS实现startActivity()
+- ActivityStackSupervisor#startActivityMayWait()
+- ActivityStack#resumeTopActivityInnerLocked
+- ActivityStackSupervisor#realStartActivityLocked()在这里调用APT的scheduleLaunchActivity,也是AIDL，不过是在远端调起了本进程Application线程
+- ApplicationThread#scheduleLaunchActivity()这是本进程的一个线程，用于作为Service端来接受AMS client端的调起
+- ActivityThread#handleLaunchActivity()接收内部类H的消息，ApplicationThread线程发送LAUNCH_ACTIVITY消息给H
+- 最终在ActivityThread#performLaunchActivity()中实现Activity的启动完成了以下几件事：
+- 从传入的ActivityClientRecord中获取待启动的Activity的组件信息
+- 创建类加载器，使用Instrumentation#newActivity()加载Activity对象
+- 调用LoadedApk.makeApplication方法尝试创建Application，由于单例所以不会重复创建。
+- 创建Context的实现类ContextImpl对象，并通过Activity#attach()完成数据初始化和Context建立联系，因为Activity是Context的桥接类，
+最后就是创建和关联window，让Window接收的事件传给Activity，在Window的创建过程中会调用ViewRootImpl的performTraversals()初始化View。
+- Instrumentation#callActivityOnCreate()->Activity#performCreate()->Activity#onCreate().onCreate()中会通过Activity#setContentView()调用PhoneWindow的setContentView()
+更新界面。
+
