@@ -16,6 +16,8 @@
 
 JDK 8中对HashMap进行了红黑树的优化，当桶元素大于 **64** ，且桶中元素长度大于 **8** 时（迭代链表效率较低），会转换为树形结构，小于 **6** 且满足条件时扩容时在转换回来。
 
+![](https://user-gold-cdn.xitu.io/2017/9/20/9839d16b2f8d488f3400dda385f993e1)
+
 ## LinkedHashMap
 
 在`HashMap`的基础上扩展了`Entry`，又称`Node`，使每个节点连接在一起额外形成了一个双向循环链表，并且支持开启访问记录，默认不开启，`Node`顺序就为插入顺序，开启后访问过后的`Node`会在`LinkedHashMap`链表的 **末尾** ，正是`LRU`算法的实现。
@@ -33,3 +35,17 @@ JDK 8中对HashMap进行了红黑树的优化，当桶元素大于 **64** ，且
 ## WeakHashMap
 
 对Key进行弱引用的绑定，而不是Value
+
+## ConcurrentHashMap
+
+上文可知，HashMap是线程不安全的，而通过`Collections.synchronizedMap`和Hashtabel是对整个对象进行无脑加锁，性能不高，而ConcurrentMap接口的引入就是为了既能同步操作又能多线程访问
+
+**JDK7**中`ConcurrentHashMap`设计成分段锁，不同于HashMap中的桶数组，`ConcurrentHashMap`中是一个Segment数组，数组中存放着桶数组
+
+![](https://user-gold-cdn.xitu.io/2017/8/13/0e35ff8362ff1f829da5ea0288c69bf2?imageView2/0/w/1280/h/960)
+
+因此并发读写上理论可以支持segment大小的并发数量
+
+**JDK8**中`ConcurrentHashMap`不是分段锁，而是一个Node数组结构，通过对操作的节点放置forwardNode，进行加锁
+
+[ConcurrentHashMap源码分析（JDK8版本）](http://blog.csdn.net/u010723709/article/details/48007881)
