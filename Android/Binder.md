@@ -2,6 +2,8 @@
 
 [图文详解 Binder](http://blog.csdn.net/carson_ho/article/details/73560642)
 
+[写给 Android 应用工程师的 Binder 原理剖析](https://juejin.im/post/5acccf845188255c3201100f)
+
 Android IPC跨进程通讯的一种机制，实现了IBinder接口，在Framework中是连接Manager和Service的桥梁</br>（例如PackageManager - PackageManagerService）
 
 ![](http://upload-images.jianshu.io/upload_images/2154124-bd83d477ef791b81.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
