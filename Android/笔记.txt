@@ -1,0 +1,104 @@
+RxJava：
+
+distinct ：去重，可根据关键字去重
+filter ：过滤满足指定条件的数据，返回true代表继续执行
+0 count 代表一次取出几个事件 skip 代表接下来跳过及几个事件 
+Observable.timer 相当于延迟任务
+Observable.interval 定时器+倒计时
+skip 跳过某些事件
+
+Observable.concat :不交错，顺序发送事件，只有前一个事件流onComplete
+才会发送下一个事件流
+
+subscribeOn 同一个Observable只能调度一次
+
+
+RecyclerView：ViewHolder刷新机制
+adapter notifyDataSetChanged ->
+ 页面上的Hodler、缓存等标记为待刷新->
+ RecyclerView requestLyaout ->
+ LayoutManager 重新测量布局
+
+
+
+Path的FillType 填充规则
+even-odd  奇偶原则：平面任意一点向任意方向发出一条射线，如果射线和图形
+相交（不包含相切）的次数为偶数则判断为在图形外部，奇数则在图形内部
+实际填充区域：图形内部区域
+
+winding：
+
+另外2个就是反向处理
+
+Paint setColoFilter 设置色彩滤镜
+
+LightColorFilter：模拟光照
+构造器2个参数mul add 默认为0xFFFFFF  0x000000
+一个用来与原色彩值相乘，一个用来最后相加
+0xFF00FF  0x200000：过滤原来的绿色，在补上红色
+
+PorterDuffColorFilter：proterduff原理
+雷同tint的原理
+
+ColorMatrixColorFilter：通过4*5的色彩矩阵来变换，功能强大！
+用来做老照片、复古、明亮等风格
+
+
+Paint setStrokeCap 帽子，对线条的末端处理，
+可以设置为默认、圆角、方向突出
+
+Paint setStrokeJoin 线条的连接，
+可以设置为默认尖角（在超过最大限制时会变为平角），平角，圆角
+
+
+Paint setPathEffect 对线条设置影响效果
+分为以下6种：
+拐角变为圆角
+随机偏移
+通过虚线来绘制，破折线效果
+通过设置Path来绘制虚线效果，衔接处设置位移，旋转，变形
+2种模式同时绘制
+2种模式混合
+
+
+多任务：操作系统同时处理多程序（进程）的一种能力
+
+进程：操作系统为一个可执行的二进制文件创建了一个载有文件自己的堆、栈、
+数据映射的内存片段
+
+
+其中在ViewGroup中无背景时
+
+onDraw在View中的表现为绘制背景和绘制自己
+由于无背景时ViewGroup考虑到了优化，不执行draw方法，
+而是执行dispatchDraw
+
+自定义View： 扩展、组合、完全自定义
+
+
+视频压缩算法
+IPB：
+I帧：视频的关键帧，视频的第一帧都是关键帧
+
+P帧：前向预测编码帧，记录这一帧和前一个I帧或者P帧的差别，由于是差值传送，压缩比较高，
+可能会导致编码错误的扩散
+
+B帧：双向预测编码帧，记录前后2帧和本帧的区别，进行叠加运算，压缩比最高，解码会多占用CPU，
+由于不是参考帧，不会导致编码错误的扩散，市面上广泛使用了B帧
+
+泛型擦除：泛型类无法通过正常手段感知泛型的类型，反射的方式可以获取到
+通配符？ 无限定边界、上边界限定 extends、下边界限定super
+
+> 换肤
+
+- 换肤
+分为主题换肤和插件化换肤
+自定义属性attr->在style对其赋值->引用资源用?attr/
+setTheme 切换主题
+方案一：recreate 重新初始化Activity
+方案二：遍历所有View，刷新色值，
+        B站方案：tint扩展所有View，实现接口，侵入性较高
+		利用LayoutInflater的setfactory记录支持换肤的View，侵入性较低
+
+
+如果GC Roots和对象是强可达关系，在GC时，弱引用也不会被回收
