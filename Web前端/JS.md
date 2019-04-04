@@ -24,31 +24,27 @@
 
 > 实现复用的手段，在JS中没有明确的继承语法，一般都是按照继承的**理念**来实现对象的成员扩充
 
-#### 混合方案
-
-> 将别的属性强加在我的身上，就拥有这个成员了。
-> **缺点**：如果拷贝的成员是引用对象的话，修改之后会在父类子类之前共享的
-
-```javascript
-function mix(src, dest) {
-  for (var v in dest) {
-      src[v] = dest[v];
-  }
-  return src;
-}
-console.log(mix({ name: "张三" }, { id: 2 }));
-```
-
 #### 原型链模式
 
 > 利用原型来实现，实现复用，只要原型有，那我也就有
-> **缺点**：对原型对象的引用对象修改后，会引发共享的问题
 
+***特点***：
+
+1. **简单**，一目了然
+2. 父类**新增原型属性**后，子类也能访问到
+
+***缺点***：
+
+1. 来自原型对象的所有属性都是**共享**的，对引用类型的操作也是**共享**的
+2. 在创建子类实例的时候，无法为**父类构造函数传递参数**
+3. 无法实现**多继承**
 
 ```javascript
 function Parent(name) {
     this.name = name;
+    this.sex = true;
 }
+Parent.prototype.say = function() {}
 
 function Child(id) {
     this.id = id;
@@ -57,17 +53,128 @@ function Child(id) {
 Child.prototype = new Parent("hhh");
 Child.prototype.constructor = Child;
 
-console.log(new Child(1));
+var child = new Child(1);
+console.log(child);
+console.log(child instanceof Child); //true
+console.log(child instanceof Parent); //true
 ```
 
-#### 冒充
+#### 构造继承模式
 
-> 借用父类的构造函数
-> **缺点**：无法获取到原型上的数据
+> 借用父类的构造函数来增强子类示例，等于是复制父类的实例属性给子类
+
+***特点***：
+
+1. 创建子类示例的时候，可以为**父类构造函数传递参数**
+2. 可以实现**多继承**
+3. 返回的是**子类实例**
+
+***缺点***：
+
+1. 只能继承父类的**实例属性**，**不能继承原型属性**
+2. 复用性差，每个子类都有父类实例函数，**消耗内存**
 
 ```javascript
 function Parent(name) {
     this.name = name;
+    this.sex = true;
+}
+Parent.prototype.say = function() {}
+
+function Child(name,id) {
+	Parent.call(this, name);
+    this.id = id;
+}
+
+var child = new Child("张三",1);
+console.log(child);
+console.log(child instanceof Child); //true
+console.log(child instanceof Parent); //false
+```
+#### 实例继承模式
+
+> 通过给父类的实例添加新属性，作为子类的实例返回
+
+***特点***：
+
+1. 返回的是**父类实例**，拥有原型属性
+2. 不限制调用，new 子类() 的效果等同 子类() 的返回对象
+
+***缺点***：
+
+1. 不支持**多继承**
+2. 由于实例是父类，所以function不是标准意义上的构造函数，不能**添加原型属性**
+
+```javascript
+function Parent(name) {
+    this.name = name;
+    this.sex = true;
+}
+Parent.prototype.say = function() {}
+
+function Child(name, id) {
+    var p = new Parent(name);
+    p.id = id;
+    return p;
+}
+
+var child = new Child("张三", 1);
+console.log(child);
+console.log(child instanceof Child); //false
+console.log(child instanceof Parent); //true
+```
+
+#### 拷贝模式
+
+> 将别的属性拷贝到我的身上，就拥有这个成员了
+
+***特点***：
+
+1. 支持**多继承**
+
+***缺点***：
+
+1. 如果拷贝的成员是引用对象的话，修改之后会在父类的子类实例之间**共享**
+2. **性能较低**
+3. 无法获取到**不可枚举的方法**
+```javascript
+function Parent(name) {
+    this.name = name;
+    this.sex = true;
+}
+Parent.prototype.say = function() {}
+
+function Child(name, id) {
+    var p = new Parent();
+    for (var v in p) {
+        this[v] = p[v];
+    }
+    this.name = name;
+    this.id = id;
+}
+
+var child = new Child("张三", 1);
+console.log(child);
+console.log(child instanceof Child); //true
+console.log(child instanceof Parent); //false
+```
+#### 构造继承+原型链模式
+
+> 将构造继承模式和原型链模式组合起来
+
+***特点***：
+
+1. 返回对象既是**父类的实例**，也是**子类的实例**
+2. 集两家之长，既可以访问到父类的属性，也可以获取到父类的原型属性，父类**新增原型属性**后，子类也能访问到
+3. 可以给**父类构造函数传递参数**
+
+***缺点***：
+
+1. 不支持**多继承**
+```javascript
+function Parent(name) {
+    this.name = name;
+    this.sex = true;
 }
 Parent.prototype.say = function() {}
 
@@ -75,7 +182,16 @@ function Child(name, id) {
     Parent.call(this, name);
     this.id = id;
 }
-console.log(new Child("hhh", 1));
+
+Child.prototype = Parent.prototype;
+Child.prototype.constructor = Child;
+
+var child = new Child("张三", 1);
+
+Parent.prototype.talk = function() {}
+console.log(child);
+console.log(child instanceof Child); //true
+console.log(child instanceof Parent); //true
 ```
 
 ### 构造函数
@@ -215,19 +331,132 @@ console.log(person.name);
 ```
 
 
-- 对象被创建的时候会自动连接上**prototype**
+- 对象被创建的时候会自动连接上**prototype**，即**凡是对象就有原型，原型也是对象**
+
 - 构造函数的**原型属性** 就是 创建出来的对象的**原型对象**，o.**\_\_proto\_\_** === O.**prototype**
-- 每个对象都有**.prototype**这个原型属性，查找属性的时候，如果找不到，会从原型中去查找（**原型链**）
-- **prototype**属性中有一个属性**constructor**，用来和构造函数关联
+
 - 由于**\_\_proto\_\_**是一个非标准对象，在早期浏览器中可能不兼容，通过**obj.constructor.prototype**来访问到
+
+- 每个对象都有**.prototype**这个原型属性，查找属性的时候，如果找不到，会从原型中去查找（**原型链**）
+
+- **prototype**属性中有一个属性**constructor**，用来和构造函数关联
+
 - 通过**直接替换**的方式修改了原型对象后，一般会添加一个**constructor**属性，因为在构造函数中可能还会调用构造函数，所以在内部应该使用**this.constructor()**
    ```javascript
-function Person() {}
-Person.prototype = {
+   function Person() {}
+   Person.prototype = {
     constructor = Person;
     //...
-}
-
+   } 
    ```
 
-- 
+
+
+## 函数
+
+1. 函数是对象，就可以使用对象的**动态特性**
+2. 函数是对象，构造函数可以创建函数
+3. 函数是函数，可以创建其他对象
+4. 函数是唯一可以限定变量作用域的结果
+5. 若函数无返回值，则默认返回undefined
+6. 实参和形参的个数可以不相等
+7. 没有重载（函数名可以相同，参数个数不同）的概念,后面的会覆盖前面的
+
+### 创建函数
+
+```javascript
+function fun2() {
+    console.log("hhh");
+}
+//等价于如下
+var fun1 = new Function('console.log("hhh");')
+```
+
+```javascript
+function fun2(arg0, arg1) {
+    console.log(arg0 + " " + arg1);
+}
+//等价于如下
+var fun1 = new Function('arg0', 'arg1', 'console.log(arg0 + " " + arg1);')
+```
+
+#### new Function
+
+> new Function(arg0,arg1,arg2,body)
+
+- Function 中的所有参数都是字符串，可以在**程序运行过程中**构建函数
+- 如果有多个参数，最后一个为函数体
+- 如果没有参数，则表示创建一个空函数
+- 在使用`var o=(new Function('{name:"hhh",id:1}'))()`的问题，由于在识别花括号之后，会把对象属性的冒号申明解析成**标记语言**，例如break指定循环的位置（Java），此时需要在{}外面包裹一层()
+
+
+### arguments对象
+
+> **伪数组对象**，表示在函数调用过程中传入的所有参数的集合，在每一个函数代码体中**都有**一个默认的对象arguments，存储着**实际传入的所有参数**。如果编程中需要变长参数的函数，就设计成**无参函数**，利用arguments
+
+```javascript
+function getMax( /*...*/ ) {
+    var max = arguments[0];
+    for (var i = 1; i < arguments.length; i++) {
+        if (max < arguments[i]) {
+            max = arguments[i];
+        }
+    }
+    return max;
+}
+console.log(getMax(1, 4, 6, 2, 5));//6
+```
+
+### 原型链结构
+
+- 任意一个函数，都是**Function**的实例，相当于{}和new Obejct的关系
+
+- Object 的构造函数是Function的一个实例
+
+- Object 作为对象继承于Function.prototype
+
+  
+
+### 自调用函数
+
+将函数视为对象，进行直接调用
+
+```javascript
+(function() { console.log("run") })()
+```
+
+### eval函数
+
+将字符串当做函数使用，轻量级的new Function("")，***开发中不要使用***
+
+```javascript
+eval('var a = 10');
+console.log(a);
+```
+
+### 两种定义
+
+#### 函数声明
+
+> 是单独写在一个结构里面，不存在逻辑判断，预解析的时候会提升到当前作用域的最前面（**函数提升**）
+
+```javascript
+function fun() {
+    function fun1() {
+        //声明
+    }
+    if(true) {
+        function fun2() {
+            //函数表达式
+        }
+        var f = function() {
+            //函数表达式
+        }
+    }
+}
+```
+
+#### 函数表达式
+
+> 预解析的时候会触发**变量提升**
+
