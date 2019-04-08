@@ -460,3 +460,70 @@ function fun() {
 
 > 预解析的时候会触发**变量提升**
 
+
+
+## 闭包
+
+> 一个具有封闭功能和包裹功能的一个结构，在JS中**函数可以构成闭包**，一般函数是一个代码结构的封闭结构，即包裹的特性，同时根据**变量作用域**的规则，只允许函数访问外部数据，外部不允许访问函数内部的数据
+>
+> 闭包是为了实现具有**私有访问空间**的函数
+
+### 解决的问题
+
+1. 闭包不允许外界访问
+2. 就是间接访问内部的数据
+
+### 方式
+
+1. return函数
+
+```javascript
+function fun() {
+    var o = { name: "hhh" };
+    return function() {
+        return o;
+    };
+}
+var f = fun();
+var v = f();
+```
+
+2. return对象
+
+```javascript
+function fun() {
+    var o1 = { name: "aaa" };
+    var o2 = { name: "bbb" };
+    return {
+        getO1: function() {
+            return o1;
+        },
+        getO2: function() {
+            return o2;
+        },
+        setO1: function(o) {
+            o1 = o;
+        },
+        setO2: function(o) {
+            o2 = o;
+        }
+    }
+}
+var c = fun();
+```
+
+### 潜在的问题
+
+```javascript
+var f = (function() {
+    //私有数据
+    var num = 10;
+    return function() {
+        return num;
+    }
+})();
+f();
+f = null;
+```
+
+函数执行需要内存，在函数中定义的变量会在函数执行结束后自动回收，但是在闭包结构中由于一直引用着，所以这些私有数据将**不会被回收**，需要在不使用的时候手动赋值为**null**
