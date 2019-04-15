@@ -235,7 +235,7 @@ p {
 
 ### 水平对齐方式：text-align
 
-> 使标签内部内容水平对齐，没有垂直对其方式，
+> 使标签内部的**文字**、**行内元素**、**行内块元素**水平对齐，没有垂直对其方式，
 >
 > - **left**
 > - **right**
@@ -287,7 +287,46 @@ p {
 - `padding-bottom`
 - `padding-left`
 
-> ***padding会撑开待带有width和height的div盒子，盒子宽度=左右padding+width+左右bording***
+### 边距：margin
+
+ `margin`连写顺序如下
+
+- `margin-top`
+- `margin-right`
+- `margin-bottom`
+- `margin-left`
+
+### 间距和边距重点
+
+- 如果一个盒子指定宽度，设置左右的padding会撑开盒子
+- 外盒子的宽度（元素空间尺寸)）= contentWidth + padding + border +margin 
+- 内盒尺寸宽度（元素实际大小）= contentWidth + padding + border
+- margin的单位除了正常的?px，?%还可以写成**auto**，即自动铺满，块级元素左右margin都为auto时会水平居中
+- 相邻的块级元素的上下边距margin会**取较大值合并**
+  ![](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_1.gif)
+- 嵌套块级元素垂直外边距会发生合并，可通过设置border-top or padding-top 或者为父级元素设置`overflow: hidden`属性来避免
+  ![](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_2.gif)
+
+### CSS3：圆角：border-radius
+
+> 多个参数时代表左上、右上、右下、左下
+
+### CSS3：盒子阴影：box-shadow
+
+- 阴影水平X轴
+- 阴影水平Y轴
+- 阴影的模糊距离
+- 阴影的尺寸
+- 阴影的颜色
+- inset：内阴影
+
+### 浮动：float
+
+> 使多个div或块级元素可以在一行上显示，浮动只有左右浮动，`float: left or right`
+
+- 浮动的元素排列位置和上一个块级元素有关系，如果上一个元素有浮动，那么与之顶部对齐
+- 浮动属性可以让块级元素、行内元素隐式**转换成有行内块的特性**
+
 
 
 ## 显示模式：display
