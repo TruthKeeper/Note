@@ -221,59 +221,6 @@ h1 + p {
 
 #### 避免上元素margin-bottom和下元素margin-top
 
-### 清除浮动带来的影响：闭合浮动
-
-> 主要是为了解决父级元素因为子级浮动引起内部高度为0的问题
-
-#### 额外标签法
-
-> 通过在浮动元素末尾添加一个空的标签例如`<div style="clear: both" />`清除浮动后，父级会自动检测子的高度，以最高的为准
-
-> 会增加冗余标签，一般不使用
-
-#### 父级添加overflow属性
-
-> `overflow:hidden|auto|scroll`，通过**BFC**的方式解决问题
-
-#### 伪元素清除浮动
-
-> 空元素的升级版，不用添加额外标签，添加额外的父级元素class
-
-```css
-.clearfix:after  {
-    content: "";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    height: 0;
-}
-.clearfix { 
-	/*使ie6以下的可以识别*/
-    *zoom: 1;
-}
-```
-
-#### 双伪元素清除浮动
-
-> 写法比上述的更加简洁
-
-```css
-.clearfix:before,.clearfix:after{
-	content:".";
-	display:table;
-}
-.clearfix:after{
-	clear:both;
-}
-.clearfix{
-	/*使ie6以下的可以识别*/
-	*zoom:1;
-}
-
-```
-
-
-
 
 ## 属性
 
@@ -412,7 +359,7 @@ p {
 
 ### CSS3：圆角：border-radius
 
-> 多个参数时代表左上、右上、右下、左下，设置为50%即为原型
+> 多个参数时代表左上、右上、右下、左下，设置为50%即为圆形
 
 ### CSS3：盒子阴影：box-shadow
 
@@ -422,6 +369,73 @@ p {
 - 阴影的尺寸
 - 阴影的颜色
 - inset：内阴影
+
+### 显示和隐藏
+
+- `display：none`：隐藏，**不占位置**
+- `display：block`：也表示**显示元素**
+- `visibilty:hidden`：隐藏，但**仍占位置**
+- `visibilty:visible`：可见
+
+### 显示溢出
+
+- `overflow: visible`：默认，显示超出父元素的内容
+- `overflow: hidden`：隐藏超出父元素的内容
+- `overflow: scroll`：不管是是否超出父元素的内容，都显示滚动条
+- `overflow: auto`：需要时添加滚动条，为**textarea**和**body**的默认值
+
+### 文本溢出
+
+> #### 设置显示方式：white-space
+
+- `normal`：默认，会换行
+- `nowrap`：强制在同一行内显示所有文本，知道文本结束或者遭遇&lt;br&gt;才换行
+
+#### 溢出处理：text-overflow
+
+```css
+/*1.强制在同一行内显示所有文本*/
+white-space: nowrap;
+/*2.超出父元素区域隐藏*/
+overflow: hidden;
+/*3.溢出部分省略号*/
+text-overflow: ellipsis;
+```
+
+- clip：默认，裁剪超出区域的
+- ellipsis：超出区域省略号代替
+
+### 鼠标样式
+
+- `cursor:pointer`：点击的小手
+- `cursor:text`：文本编辑 **I**
+- `cursor:move`：移动的十字架
+- `cursor:default`：默认，白色箭头
+
+### 轮廓线
+
+> 在input标签有焦点的时候默认有蓝色的轮廓线，几乎不使用默认样式，通常`outline: none`将其去掉
+
+### 防止拖拽
+
+> **textarea**标签防止输入区域被拉扯拖拽`resize: none`
+
+### 垂直对齐：vertical-align
+
+> 该属性定义**行内元素**和**行内块元素**的基线相对于该元素所在行的基线的垂直对齐，常见的在`img`和`input`标签对齐上
+
+| 值          | 描述                                     |
+| :---------- | :--------------------------------------- |
+| baseline    | 默认。元素放置在父元素的基线上。         |
+| sub         | 垂直对齐文本的下标。                     |
+| super       | 垂直对齐文本的上标                       |
+| **top**     | 把元素的顶端与行中最高元素的顶端对齐     |
+| text-top    | 把元素的顶端与父元素字体的顶端对齐       |
+| **middle**  | 把此元素放置在父元素的中部。             |
+| **bottom**  | 把元素的顶端与行中最低的元素的顶端对齐。 |
+| text-bottom | 把元素的底端与父元素字体的底端对齐。     |
+
+
 
 ### 列表样式属性：list-style
 
@@ -433,6 +447,57 @@ p {
 - 浮动属性可以让块级元素、行内元素隐式**转换成有行内块的特性**
 - 不要使用浮动来做覆盖的效果，因为文本不会被覆盖，要用`postion:absolut`e来做
 - 浮动的盒子`margin:0 auto`水平居中会失效
+
+### 清除浮动带来的影响：闭合浮动
+
+> 主要是为了解决父级元素因为子级浮动引起内部高度为0的问题
+
+#### 额外标签法
+
+> 通过在浮动元素末尾添加一个空的标签例如`<div style="clear: both" />`清除浮动后，父级会自动检测子的高度，以最高的为准
+
+> 会增加冗余标签，一般不使用
+
+#### 父级添加overflow属性
+
+> `overflow:hidden|auto|scroll`，通过**BFC**的方式解决问题，**缺点：超出部分会被隐藏**
+
+#### 伪元素清除浮动
+
+> 空元素的升级版，不用添加额外标签，添加额外的父级元素class
+
+```css
+.clearfix:after  {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+}
+.clearfix { 
+	/*使ie6以下的可以识别*/
+    *zoom: 1;
+}
+```
+
+#### 双伪元素清除浮动
+
+> 写法比上述的更加简洁
+
+```css
+.clearfix:before,.clearfix:after{
+	content:".";
+	display:table;
+}
+.clearfix:after{
+	clear:both;
+}
+.clearfix{
+	/*使ie6以下的可以识别*/
+	*zoom:1;
+}
+
+```
 
 ## 定位：position 
 
@@ -457,17 +522,17 @@ p {
 
 > 相对于原文档流的位置进行定位，即相对于自身左上角的位置进行偏移，但是任然**占有原来的位置**
 
-
-
 #### 绝对定位：absolute
 
 > 相对于已经定位（**relative**、**absolute**、**fixed**）的最近上级元素（没有的话以浏览器窗体body）进行定位，和浮动一样，**不占位置**。常用口诀：**子绝父相**，子元素是绝对定位的时候，父级元素基本上都有相对定位
 
-
-
 #### 固定定位：fixed
 
-> 固定定位，相对于浏览器窗口进行定位
+> 固定定位，可以理解为特殊的绝对定位，只会相对于浏览器窗口进行定位，**不占位置**，不随窗口滚动而滚动 
+
+### 叠放次序
+
+> 当多个定位元素放置时可能会出现重叠的问题，默认**后来者居上**，可使用`z-index:1-?`，无单位，默认0，数值越大，叠放层级越高，只用于定位中的**相对定位**、**绝对定位**和**固定定位**
 
 
 
@@ -481,6 +546,7 @@ p {
 - 宽度默认是容器的100%
 - 可以容纳**内联元素**和其他**块级元素**
 - 文字类的块级元素p，h1-h6，里面不可以再放其他块级元素
+- 也表示显示元素
 
 ### 行内元素：inline
 
@@ -497,4 +563,84 @@ p {
 - 与相邻的行内元素或行内块元素在一行上
 - 默认宽度就算是本身内容的宽度
 - 高度和宽度可以设置
+- 有**默认的间隙** 
+
+## 精灵图（雪碧图）
+
+> 将多张背景图放在一张大的背景图上的技术，减少服务器请求次数
+
+```css
+.cls {
+    height: 42px;
+    width: 42px;
+    background: url(https://static.hdslb.com/images/base/icons.png) -137px -970px;
+}
+```
+
+## 滑动门
+
+> 精灵图延伸出来的一种方案，重点利用背景可以指定位置的特性的来做覆盖拉伸或拼接的效果
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    a {
+        height: 33px;
+        background: url(https://res.wx.qq.com/a/wx_fed/weixin_portal/res/static/img/lTcb_ve.png) no-repeat;
+        padding-left: 16px;
+        display: inline-block;
+    }
+
+    span {
+        display: inline-block;
+        padding-right: 16px;
+        line-height: 33px;
+        height: 33px;
+        text-decoration: none;
+        color: white;
+        background: url(https://res.wx.qq.com/a/wx_fed/weixin_portal/res/static/img/lTcb_ve.png) no-repeat right;
+    }
+    </style>
+</head>
+<body>
+    <a href="#"><span>首页</span></a>
+</body>
+</html>
+```
+## 网格边框问题
+
+> 网格边框线去掉右边框和底部边框的话，可以通过给`li`设置`float`，父元素设置条目总宽度，爷元素设置超出区域隐藏`overflow`
+
+```css
+div {
+    width: 498px;
+    height: 298px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+ul {
+    width: 500px;
+    height: 300px;
+}
+
+li {
+    width: 98px;
+    height: 98px;
+    float: left;
+    list-style: none;
+    border-right: 2px dashed #ccc;
+    border-bottom: 2px dashed #ccc;
+}
+```
+
+## 字体图标
+
+> **iconfont**，比图片更小，良好的缩放性，可以更改颜色，适配移动端的利器
+
+
 
