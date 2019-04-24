@@ -221,6 +221,10 @@ h1 + p {
 
 #### 避免上元素margin-bottom和下元素margin-top
 
+### 行内块直接的间隙
+
+可用`float`和`position`来处理
+
 
 ## 属性
 
@@ -263,15 +267,19 @@ p {
  p {
 	font: bold 20px "宋体";
    }
+
+ span {
+	font: bold 16px/1.5 "宋体";/*1.5倍行高*/
+   }
 ```
 
 
 
 ### 字体颜色：color
 
-- color: #ffffff
-- color:green;
-- color: rgb(155,100,0) or rgb(20%,100%,0%)
+- `color: #ffffff`
+- `color:green`
+- `color: rgb(155,100,0) | rgb(20%,100%,0%)`
 
 ### 行高：line-height
 
@@ -352,7 +360,7 @@ p {
 - 外盒子的宽度（元素空间尺寸)）= contentWidth + padding + border +margin 
 - 内盒尺寸宽度（元素实际大小）= contentWidth + padding + border
 - margin的单位除了正常的?px，?%还可以写成**auto**，即自动铺满，块级元素左右margin都为auto时会水平居中
-- 相邻的块级元素的上下边距margin会**取较大值合并**
+- 相邻的块级元素的上下边距`margin`会**取较大值合并**
   ![](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_1.gif)
 - 嵌套块级元素垂直外边距会发生合并，可通过设置border-top or padding-top 或者为父级元素设置`overflow: hidden`属性来避免
   ![](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_2.gif)
@@ -435,9 +443,9 @@ text-overflow: ellipsis;
 | **bottom**  | 把元素的顶端与行中最低的元素的顶端对齐。 |
 | text-bottom | 把元素的底端与父元素字体的底端对齐。     |
 
-
-
 ### 列表样式属性：list-style
+
+
 
 ## 浮动：float
 
@@ -533,8 +541,6 @@ text-overflow: ellipsis;
 ### 叠放次序
 
 > 当多个定位元素放置时可能会出现重叠的问题，默认**后来者居上**，可使用`z-index:1-?`，无单位，默认0，数值越大，叠放层级越高，只用于定位中的**相对定位**、**绝对定位**和**固定定位**
-
-
 
 ## 显示模式：display
 
@@ -642,5 +648,19 @@ li {
 
 > **iconfont**，比图片更小，良好的缩放性，可以更改颜色，适配移动端的利器
 
+1. 在css中定义字体`@font-face`
+2. 在元素css中应用字体样式`font-family`
+3. 在html中添加
 
+在`https://icomoon.io/app/#/select`下载免费的字体图标、svg转换成字体图标
+
+## logo设计
+
+```html
+<div class="logo">
+    <h1>
+        <a href="#" title="京东网">京东</a>
+    </h1>
+</div>
+```
 
