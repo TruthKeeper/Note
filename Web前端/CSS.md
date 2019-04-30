@@ -158,19 +158,48 @@ h1 + p {
 }
 ```
 
+### 属性选择器
+
+> 选择标签中带有特殊属性的
+
+- `[attribute]`：选择带有 target 属性所有元素
+- `div[class=abc]`：选择class属性为abc所有div元素
+
 ### 伪类选择器
 
 > 用于向某些选择器添加**特殊**的效果
 
 #### 链接
 
-- :link  未访问过的链接状态
-- :visited  访问过的状态
-- :hover  鼠标经过链接的时候
-- :activte  鼠标按下的状态
+- `:link`  未访问过的链接状态
+- `:visited`  访问过的状态
+- `:hover`  鼠标经过链接的时候
+- `:activte`  鼠标按下的状态
 
 > hover属性必须在link和visited后，active必须在hover后，**lvha记法：LoveHate**
 
+#### 结构伪类
+
+| 选择器  |   例子   |   描述   |
+| ---- | ---- | ---- |
+|   `:first-letter`   |   `p:first-letter`   |  选择每个p元素的首字母|
+|   `:first-line`   |   `p:first-line`   |   选择每个p元素的首行   |
+|   `:first-child`   |   `p:first-child`| 选择属于父元素的第一个子元素的每个p元素|
+|   **CSS3**`:nth-child(n)`   | `p:nth-child(2|3n|odd|even)` | 选择属于其父元素的第二个子元素的每个p元素，选择3的倍数，选择奇数，选择偶数 |
+
+
+- `:first-letter`：`p:first-letter`选择每个p元素的首字母。
+- `:first-line`：`p:first-line`选择每个p元素的首行。
+- `:first-child`：`p:first-child`选择属于父元素的第一个子元素的每个p元素
+- **CSS3**`:last-child`：`p:last-child`选择属于父元素的最后一个子元素的每个p元素
+- `:nth-child(n)`
+
+### 伪元素选择器
+
+> 能插入元素的选择器
+
+- `::before`：`p:before`在每个p元素的内容之前插入内容。
+- `::after`：`p:after`在每个 p元素的内容之后插入内容。
 
 ## 三大特性
 
@@ -667,3 +696,7 @@ li {
 </div>
 ```
 
+## CSS3盒子模型
+
+- `box-sizing: content-box`盒子大小=width+padding+border
+- `box-sizing: border-box`盒子大小=width，padding和border都是包含的

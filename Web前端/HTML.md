@@ -1,6 +1,6 @@
 # HTML
 
-## 标签
+## 常规
 
 ### 超链接
 
@@ -76,14 +76,14 @@ a标签的target属性
 
 #### label
 
-> 当用户点即此标签后，会将焦点给指定的表单标签
->
-> - 直接包裹input标签
-> - 多个input标签时，通过**for**属性指定标签的**id**
->
-> #### textarea
->
-> > 文本域标签，用于多行文本 
+当用户点即此标签后，会将焦点给指定的表单标签
+
+- 直接包裹input标签
+- 多个input标签时，通过**for**属性指定标签的**id**
+
+#### textarea
+
+> 文本域标签，用于多行文本 
 
 #### select
 
@@ -96,33 +96,33 @@ a标签的target属性
 </select>
 ```
 
-#### datalist
 
-> 候选框
->
-> ```html
-> <input type="text" value="输入姓名" list="namelist">
-> <datalist id="namelist">
->     <option>张三</option>
->     <option>李四</option>
->     <option>王五</option>
->     <option>王富贵</option>
-> </datalist>
-> ```
->
-> #### fieldset
->
-> > 配合legend标签使用，对表单元素进行**分组**
->
-> ```html
-> <fieldset>
->    <legend>用户登录</legend>
->    <span>账号：</span>
->    <input type="text" name="">
->    <br />
->    <span>密码：</span>
->    <input type="password" name="">
-> </fieldset>
-> ```
->
-> 
+
+## HTML5新增
+
+### 候选框：datalist
+
+```html
+<input type="text" value="输入姓名" list="namelist">
+<datalist id="namelist">
+ <option>张三</option>
+ <option>李四</option>
+ <option>王五</option>
+ <option>王富贵</option>
+</datalist>
+```
+
+### 表单分组：fieldset
+
+> 配合legend标签使用，对表单元素进行**分组**
+
+```html
+<fieldset>
+<legend>用户登录</legend>
+<span>账号：</span>
+<input type="text" name="">
+<br />
+<span>密码：</span>
+<input type="password" name="">
+</fieldset>
+```
