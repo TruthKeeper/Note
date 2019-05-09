@@ -185,18 +185,13 @@ h1 + p {
 |   `:first-letter`   |   `p:first-letter`   |  选择每个p元素的首字母|
 |   `:first-line`   |   `p:first-line`   |   选择每个p元素的首行   |
 |   `:first-child`   |   `p:first-child`| 选择属于父元素的第一个子元素的每个p元素|
+|   **CSS3**`:last-child`   |   `p:last-child`| 选择属于父元素的最后一个子元素的每个p元素|
 |   **CSS3**`:nth-child(n)`   | `p:nth-child(2|3n|odd|even)` | 选择属于其父元素的第二个子元素的每个p元素，选择3的倍数，选择奇数，选择偶数 |
 
 
-- `:first-letter`：`p:first-letter`选择每个p元素的首字母。
-- `:first-line`：`p:first-line`选择每个p元素的首行。
-- `:first-child`：`p:first-child`选择属于父元素的第一个子元素的每个p元素
-- **CSS3**`:last-child`：`p:last-child`选择属于父元素的最后一个子元素的每个p元素
-- `:nth-child(n)`
-
 ### 伪元素选择器
 
-> 能插入元素的选择器
+> 能插入元素的选择器，插入的元素为**行内元素**，必须对其设置**content**
 
 - `::before`：`p:before`在每个p元素的内容之前插入内容。
 - `::after`：`p:after`在每个 p元素的内容之后插入内容。
@@ -356,6 +351,25 @@ p {
 - 背景固定：`background-attachment:fixed|scroll`
 - 背景定位：`background-position: 10px 50px` ***Y坐标不写默认垂直居中***
 
+#### CSS3：背景缩放：background-size
+
+- 可以设置长度单位px或者百分比，如果只设置一个值，第二个值会被设置为**auto**，就是自动缩放
+- `cover`：类似Android的CenterCrop，缩放到始终填充背景区域
+- `contain`：自动调整比例，保证图片完整显示在背景区域当中
+
+#### CSS3：背景渐变
+
+> 兼容性较差
+
+- 标准语法：`background: -linear-gradient(0deg, white, red)` or `background: -webkit-linear-gradient(45deg, white 0%, red 20%, green 100%)`
+- Chrome语法：`background: -webkit-linear-gradient(0deg, white, red)`
+- 。。。
+
+#### CSS3：多背景
+
+> `background`属性用逗号分隔，如果用到颜色的话，颜色属性需要写到下方，防止被叠加
+
+
 ### 边框：border
 
 > `border`连写顺序如下
@@ -475,8 +489,123 @@ text-overflow: ellipsis;
 | **bottom**  | 把元素的顶端与行中最低的元素的顶端对齐。 |
 | text-bottom | 把元素的底端与父元素字体的底端对齐。     |
 
-### 列表样式属性：list-style
+```css
+  span {
+      vertical-align: middle;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+  }
+```
 
+
+
+### CSS3：过渡：transition
+
+> 补间动画，指定属性变化时，多组属性用**逗号**隔开，**all**代表所有属性
+
+```css
+div {
+    transition: width 1s, height 250ms;
+    width: 100px;
+    height: 100px;
+    background-color: pink;
+    margin: 100px;
+}
+```
+
+- `transition-property`：要过渡的属性
+- `transition-duration`：花费时间
+- `transition-timing-function`：过渡时间曲线，默认ease逐渐减速
+- `transition-delay`：延迟
+
+
+
+### CSS3：2D变形：transform
+
+> 可以实现**位移**、**旋转**、**倾斜**、**缩放**、甚至矩阵变换
+
+- 位移，`translate(10px, 10px)`，`translate(-50%)`
+- 缩放，`sacale(.8,1.5)`，宽度变成0.8倍，高度变成1.5倍
+- 旋转，`rotate(180deg)`，可以通过`transform-origin: left top`属性设置旋转中心点
+- 斜切，`skew(30deg,30deg)` 
+
+### CSS3：3D变形：transform
+
+- 为父元素设置`perspective`属性可以调整视距
+- `backface-visibilty：hidden`不是正面对象屏幕就隐藏，3D盒子的场景
+
+### CSS3：动画：animation
+
+> 一个CSS通过某种规则过渡到新的CSS样式
+
+- `animation`：连写顺序如下
+- `animation-name`：动画名称，在CSS中`@keyframes 动画名称{}`定义
+- `animation-duration`：动画花费时间，默认0s
+- `animation-timing-function`：动画运动曲线，默认`ease`
+- `animation-delay`：动画何时开始，默认0s
+- `animation-iteration-count`：动画执行次数，默认1，`infinite`无限播放
+
+```css
+@keyframes anim1 {
+    0% {
+        margin-left: 0;
+    }
+    50% {
+        margin-left: 30px;
+    }
+    100% {
+        margin-left: 20px;
+    }
+}
+```
+
+### CSS3：伸缩布局：flex
+
+> 父布局`display:flex`
+
+- `flex-direction`：父元素主轴的方向，`row|row-reverse|column|column-reverse`
+- `flex-grow`：定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。 
+- `flex-shrink`：定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。 
+- `flex-basis`：定义了在分配多余空间之前，项目占据的主轴空间（main size）。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为auto，即项目的本来大小。
+
+```css
+.item {flex: none;}
+/*等同于*/
+.item {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+```
+
+  ```css
+.item {flex: auto;}
+/*等同于*/
+.item {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
+  ```
+
+```css
+.item {flex: 1;}
+/*等同于*/
+.item {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+}
+```
+
+
+
+  
+
+### CSS3：文字阴影：text-shadow
+
+> `text-shadow`：**水平位置**  **垂直位置**  **模糊距离**  **阴影颜色**
 
 
 ## 浮动：float
@@ -588,7 +717,7 @@ text-overflow: ellipsis;
 
 ### 行内元素：inline
 
-> 不占有独立的空间，一般不可设置宽度和高度，常见的有span，a，strong
+> 不占有独立的空间，一般不可设置宽度和高度以及margin，常见的有span，a，strong
 
 - 和相邻行内元素在一行上
 - 默认宽度就算是本身内容的宽度

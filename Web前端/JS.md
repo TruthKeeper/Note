@@ -212,6 +212,8 @@ var p = new Person();
 
 ## DOM
 
+![](E:\Note\Web前端\DOM和BOM.jpg)
+
 父节点
 	兄弟节点
 	当前节点
@@ -227,8 +229,8 @@ var p = new Person();
 - **document.createElement**：创建元素节点
 - **document.createTextNode**：创建文本节点
 - **document.createAttribute**：创建属性节点
-- **innerHTML**
-- **innerText**
+- **innerHTML** 
+- **innerText ** 用来设置文本的，设置标签是没有效果的
 - **cloneNode()**
 
 #### 加入
@@ -288,6 +290,8 @@ var p = new Person();
 - **document.getElementByName**
 - **document.getElementByTagName**
 - **document.getElementByClassName**
+- **document.querySelector**传入css选择器，返回查询到的第一个
+- **document.querySelectorAll**传入css选择器，返回查询到的所有结果
 
 #### 亲属访问
 
@@ -302,11 +306,28 @@ var p = new Person();
 
 #### 其他
 
-nodeValve：节点的值，一般在文本节点使用，获取值
+- **nodeValue**：节点的值，一般在文本节点使用，获取值
+- **nodeName**：节点的名称，输出是大写
+- **nodeType**：1：元素节点 2：属性节点 3：文本节点
 
-nodeName：节点的名称，输出是大写
+## WebAPI
 
-nodeType：1元素节点 2属性节点 3文本节点
+> 浏览器提供一套操作**DOM**和**BOM**的**API**
+
+- `onclick`方法`return false`会取消浏览器默认行为，例如`a`标签的跳转
+- `onmouseover`鼠标经过，`onmouseout`鼠标离开
+- `onfocus`获取到焦点，`onblur`失去焦点
+- `addEventListener`绑定事件，不需要带on
+
+## 事件冒泡
+
+> 多个元素嵌套，有层次关系，并且这些元素都注册了相同的事件，如果里面的元素时间触发了，外面的元素的该事件也会自动触发
+
+取消事件冒泡
+
+`window.event..cancelBubble=true`：IE、谷歌
+
+`e.stopPropagation()`：谷歌、火狐
 
 ## 原型
 
@@ -527,3 +548,16 @@ f = null;
 ```
 
 函数执行需要内存，在函数中定义的变量会在函数执行结束后自动回收，但是在闭包结构中由于一直引用着，所以这些私有数据将**不会被回收**，需要在不使用的时候手动赋值为**null**
+
+
+
+## Date类
+
+- 获取年：`new Date().getFullYear()`
+- 获取月：`new Date().getMonth()+1`从0开始
+- 获取日：`new Date().getDate()`
+- 获取周：`new Date().getDay()`从0开始
+- 获取时：`new Date().getHours()`
+- 获取分：`new Date().getMinutes()`
+- 获取秒：`new Date().getSeconds()`
+
