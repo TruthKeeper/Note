@@ -424,6 +424,10 @@ p {
 - 阴影的颜色
 - inset：内阴影
 
+### CSS3：透明度：opacity
+
+`opacity: .5`
+
 ### 显示和隐藏
 
 - `display：none`：隐藏，**不占位置**

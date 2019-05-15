@@ -1,10 +1,17 @@
 # JavaScript
 
 > 基于***对象***和***事件驱动***的的***多范式脚本***语言
+>
+> ## script标签的特点
+>
+> - 标签内的`innerHtml`不会显示在界面上
+> - 如果`type`不等于`text/javascript`的话，内容不会作为JS代码执行
 
 ##  对象
 
-> 在JS中，对象就是键值对的集合
+> 在JS中，对象就是键值对的集合，
+
+- `Object.prototype.toString.call`原型方法打印对象的具体类型
 
 ### 抽象性
 
@@ -210,7 +217,25 @@ var p = new Person();
 2. 申请内部空间，执行构造函数，将this指向当前对象，如果支持**\_\_proto\_\_**属性的话，创建此属性，将其指向**prototype**对象
 3. 将内存地址赋给p
 
+## 数组Array
+
+- `join`：将数组元素以分隔符的形式拼接成字符串
+- `push`：接受任意数量的参数，将其添加到数组末尾，返回数组的新长度
+- `pop`：移除末尾项，会减少数组额length，并且返回移除的项
+- `shift`：删除数组的第一项
+- `unshift`：接受任意数量的参数，将其添加到数组开头，返回数组的新长度
+- `sort`：默认将每一项转换成字符串后按升序排列，可传入两参的function自定义排序
+- `reverse`：反转数组
+- `concat`：将当期数组拷贝一份，将传入的任意参数添加至末尾后，返回新数组（不会影响原有数组），如果参数是数组，会展开一级数组
+- `slice`：接受一个或两个参数，返回从指定下标到结束下标的新数组
+- `splice`
+	两参：删除数组指定下标到结束下标，返回删除的项
+	三参以上：起始下标，要删除的项数，要插入的项，splice(2,1,4,6) 删除当前数组的下标2，从下标2开始插入4和6
+- `indexOf`、`lastIndexOf`：查找项在数组中的位置，可传入第二个参数，开始查找的索引位置
+
 ## DOM
+
+> Document Object Model：文档对象模型
 
 ![](E:\Note\Web前端\DOM和BOM.jpg)
 
@@ -270,6 +295,8 @@ var p = new Person();
 
 - **style.xxx=yyy**
 - **setAttribute**
+- **.classList.add** 添加类名
+- **.classList.remove** 删除类名
 
 #### 修改文本
 
@@ -310,16 +337,75 @@ var p = new Person();
 - **nodeName**：节点的名称，输出是大写
 - **nodeType**：1：元素节点 2：属性节点 3：文本节点
 
+## BOM
+
+> Browser Object Module：浏览器对象模型
+
+- 页面中的顶级对象`document`率属于浏览器的顶级对象`window`
+- `onload`：页面加载完的回调
+- `window.location.href`获取到当前地址
+- `window.location.replace`用该方法跳转不会记录到历史中
+- `window.location.reload`重新刷新
+- `window.history.back()`退回到上个历史
+- `window.history.forward()`前进到上个历史
+- `windown.navigator.userAgent`获取浏览器类型
+- `windown.navigator.platform`获取系统平台类型
+
+### 定时器
+
+```javascript
+//开始一个反复的定时器
+var intervalId = setInterval(function() {
+    
+}, 1000);
+//移除定时器
+clearInterval(intervalId);
+
+//开始一个一次性的定时器
+var timeId = setTimeout(function() {
+    
+}, 1000);
+//移除定时器
+clearTimeout(timeId);
+```
+
 ## WebAPI
 
 > 浏览器提供一套操作**DOM**和**BOM**的**API**
 
-- `onclick`方法`return false`会取消浏览器默认行为，例如`a`标签的跳转
+- `onclick`方法`return false` 或者`e.preventDefault()`会取消浏览器默认行为，例如`a`标签的跳转
 - `onmouseover`鼠标经过，`onmouseout`鼠标离开
 - `onfocus`获取到焦点，`onblur`失去焦点
 - `addEventListener`绑定事件，不需要带on
 
-## 事件冒泡
+### 获取样式
+
+- 如果样式代码是在style标签中设置的，js默认是获取不到属性的，不过可以通过`offsetLeft`等属性获取到
+- 如果样式代码是在style的属性中设置（行内样式）的，js可以获取到
+- 通过`window.getComputedStyle`获取到元素计算后的样式
+
+### offset
+
+- `offsetLeft`：当前元素 左边框 外边缘 到 最近的已定位父级（`offsetParent`） 左边框 内边缘的距离。如果父级都没有定位，则分别是到 `body` 顶部 和左边的距离
+- `offsetWidth`是包含边框的
+
+### scroll
+
+- `scrollWidth`：元素中内容的实际宽度（不包含边框），如果没有内容，就是元素无边框的宽
+- `scrollHeight`：元素中内容的实际高度（不包含边框），如果没有内容，就是元素无边框的高
+- `scrollTop`：元素滚动的上距离
+- `scrollLeft`：元素滚动的左距离
+
+### client
+
+- `clientWidth`：可视区域的宽度，不包含边框，包含padding
+- `clientHeight`：可视区域的高度，不包含边框，包含padding
+- `clientTop`：上边框的宽度
+- `clientLeft`：左边框的宽度
+
+## 事件
+
+### 事件冒泡
 
 > 多个元素嵌套，有层次关系，并且这些元素都注册了相同的事件，如果里面的元素时间触发了，外面的元素的该事件也会自动触发
 
@@ -328,6 +414,18 @@ var p = new Person();
 `window.event..cancelBubble=true`：IE、谷歌
 
 `e.stopPropagation()`：谷歌、火狐
+
+### 事件阶段
+
+- `Event.CAPTURING_PHASE`：1：事件捕获阶段，从外向内
+- `Event.AT_TARGET`：2：事件目标阶段
+- `Event.BUBBLING_PHASE`：3：事件冒泡阶段，事件会从里到外（**一般都是冒泡阶段**）
+
+`addEventListener`第三个参数，是否在捕获阶段绑定事件监听，`e.eventPhase`表示当前事件的阶段
+
+### 事件对象
+
+`e.clientX`属性获取在窗体可视区域内的X轴，可以通过`document.onmousemove`设置鼠标跟随图标
 
 ## 原型
 

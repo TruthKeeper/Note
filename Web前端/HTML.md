@@ -132,3 +132,21 @@ a标签的target属性
 
 
 ### 视频：video
+
+
+
+### 自定义属性
+
+规范：
+
+- data开头
+- 全部小写
+- 不要有任何特殊符号
+- 不要纯数字
+
+```html
+<!--对应JS取值camel命名法：button.dataset['schoolName']-->
+<button class="aaa clearfix" data-school-name="哈哈哈">走你</button>
+
+```
+
