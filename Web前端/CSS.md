@@ -350,6 +350,7 @@ p {
 - 背景重复：`background-repeat:repeat|no-repeat|repeat-x|repeat-y`
 - 背景固定：`background-attachment:fixed|scroll`
 - 背景定位：`background-position: 10px 50px` ***Y坐标不写默认垂直居中***
+- 背景图像占区域比例：`background-size` `/50%` 斜杠后
 
 #### CSS3：背景缩放：background-size
 
@@ -566,9 +567,26 @@ div {
 
 ### CSS3：伸缩布局：flex
 
-> 父布局`display:flex`
+#### 父元素属性
 
+- `display:flex`  子元素默认变成伸缩项，当子元素宽度总和大于与容器宽度，默认会平均收缩
+- `justify-content:flex-start`  主轴方向：子元素从父容器起始位置开始排列
+- `justify-content:flex-endt`   主轴方向：子元素从父容器结束位置开始排列
+- `justify-content:center`   主轴方向：子元素从父容器中间位置开始排列
+- `justify-content:space-between`   主轴方向：左右对齐父容器的开始结束位置，中间平分间距
+- `justify-content:space-around`   主轴方向：将多余的空间平均的分配给子元素的两边，像margin的效果
+- `justify-content:space-evenly`   主轴方向：将多余的空间平均分配到子元素之间的距离
+- `flex-wrap:nowrap`  默认不换行
+- `flex-wrap:wrap`  换行
+- `flex-wrap:wrap-reverse`  翻转，从下到上来排列
+- `flex-direction`：父容器主轴的方向，`row|row-reverse|column|column-reverse`
 - `flex-direction`：父元素主轴的方向，`row|row-reverse|column|column-reverse`
+- **flex-flow**：`flex-wrap`和`flex-direction`的简写形式
+- `align-items`：设置所有子元素在交叉轴上的对齐方式，默认是`stretch`，拉伸填充  `flex-start | flex-end | center | baseline | stretch`
+- `align-content`：定义了多根轴线的对齐方式。如果只有一根轴线，该属性不起作用
+
+#### 子元素属性
+
 - `flex-grow`：定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。 
 - `flex-shrink`：定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。 
 - `flex-basis`：定义了在分配多余空间之前，项目占据的主轴空间（main size）。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为auto，即项目的本来大小。
@@ -603,13 +621,38 @@ div {
 }
 ```
 
-
+- `align-self`：可以为单个子元素设置对齐方式，`auto|flex-start|flex-end|center|baseline|stretch`
 
   
 
 ### CSS3：文字阴影：text-shadow
 
 > `text-shadow`：**水平位置**  **垂直位置**  **模糊距离**  **阴影颜色**
+
+### CSS3：多列布局：column
+
+```css
+div {
+    width: 100%;
+    /*设置几列*/
+    column-count: 3;
+    /*列间隙的样式*/
+    column-rule:  2px solid red;
+    /*列间隙大小*/
+    column-gap: 3px;
+    /*列宽，原则：取大优先*/
+    /*1.如果人为设置一个较大的值，会填充到更大的列宽，最终宽度会大于设置的列宽*/
+    /*2.如果较小，则使用默认的列宽*/
+    column-width: 100px;
+}
+
+h4 {
+    /*设置跨列显示 1 or all*/
+    column-span: all;
+}
+```
+
+
 
 
 ## 浮动：float
@@ -833,3 +876,119 @@ li {
 
 - `box-sizing: content-box`盒子大小=width+padding+border
 - `box-sizing: border-box`盒子大小=width，padding和border都是包含的
+
+## Rem
+
+- `rem`是相对单位
+- `em`的大小是基于父容器的字体大小
+- `rem`的大小是基于**r**（根元素`html`）的字体大小
+
+## Less语法
+
+> CSS预编译
+
+### 变量
+
+> @前缀，以分号结束，不能包含特殊字符，不能以数字开头
+
+```less
+@charset "UTF-8";
+@mainColor: #ff6262;
+@className: divider;
+a {
+  color: @mainColor;
+}
+//用于拼接变量 
+.@{className} {
+  color: @mainColor;
+}
+    
+```
+
+### 混入mixin
+
+#### 类混入
+
+```less
+@charset "UTF-8";
+
+.w {
+  margin: 0 auto;
+}
+
+header {
+  .w();
+}
+```
+
+#### 函数混入
+
+- 如果函数定义了参数（没有默认值），调用的时候必须传参
+- `.float(@direction:right) {}`冒号定义默认值
+
+```less
+@charset "UTF-8";
+
+.w() {
+  margin: 0 auto;
+}
+
+.box-shadow(@style, @c) {
+  -webkit-box-shadow: @style @c;
+  box-shadow: @style @c;
+}
+
+header {
+  .w();
+  .box-shadow(0 0 10px, #ccc)
+}
+
+```
+
+### 嵌套
+
+```less
+@charset "UTF-8";
+
+.app {
+  width: 100px;
+
+  img {
+    display: none;
+  }
+
+  .w {
+    width: 50px;
+  }
+
+  > p {
+    font-size: 20px;
+  }
+  //&来拼接
+  &:hover {
+    color: red;
+  }
+}
+```
+
+### 导入
+
+> 模块化工程
+
+```less
+@charset "UTF-8";
+@import url(variable.less);
+@import url(mixins.less);
+@import url(header.less);
+```
+
+### 函数
+
+```less
+@num: 3;
+.app {
+  width: 100%/@num;
+  color: #111+#ff6262;
+}
+```
+

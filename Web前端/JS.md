@@ -659,3 +659,11 @@ f = null;
 - 获取分：`new Date().getMinutes()`
 - 获取秒：`new Date().getSeconds()`
 
+## ES6
+
+### let关键字
+
+> 块级作用域，
+
+### =>
+
