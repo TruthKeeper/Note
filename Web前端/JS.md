@@ -217,21 +217,107 @@ var p = new Person();
 2. 申请内部空间，执行构造函数，将this指向当前对象，如果支持**\_\_proto\_\_**属性的话，创建此属性，将其指向**prototype**对象
 3. 将内存地址赋给p
 
+## 字符串String
+
+- `padStart`：补全函数，传递补全的位数和补全的字符串，从字符串开头开始，`padEnd`从字符串尾开始
+- 
+
 ## 数组Array
 
-- `join`：将数组元素以分隔符的形式拼接成字符串
+
 - `push`：接受任意数量的参数，将其添加到数组末尾，返回数组的新长度
 - `pop`：移除末尾项，会减少数组额length，并且返回移除的项
 - `shift`：删除数组的第一项
 - `unshift`：接受任意数量的参数，将其添加到数组开头，返回数组的新长度
+
+<!-------------------------------------------------------------->
+
+- `join`：将数组元素以分隔符的形式拼接成字符串
 - `sort`：默认将每一项转换成字符串后按升序排列，可传入两参的function自定义排序
 - `reverse`：反转数组
 - `concat`：将当期数组拷贝一份，将传入的任意参数添加至末尾后，返回新数组（不会影响原有数组），如果参数是数组，会展开一级数组
+
+
 - `slice`：接受一个或两个参数，返回从指定下标到结束下标的新数组
 - `splice`
-	两参：删除数组指定下标到结束下标，返回删除的项
-	三参以上：起始下标，要删除的项数，要插入的项，splice(2,1,4,6) 删除当前数组的下标2，从下标2开始插入4和6
+  两参：删除数组指定下标到结束下标，返回删除的项
+  三参以上：起始下标，要删除的项数，要插入的项，splice(2,1,4,6) 删除当前数组的下标2，从下标2开始插入4和6
 - `indexOf`、`lastIndexOf`：查找项在数组中的位置，可传入第二个参数，开始查找的索引位置
+
+### forEach
+
+> 没有返回值，只是针对每个元素调用func（没有返回值，如果里面有操作方法就会改变原数组）
+
+```javascript
+var array = '12345678'.split('');
+array.forEach(function (item, index, array) {
+    array[index] = Number(item) + 1;
+});
+console.log(array);
+```
+
+### map
+
+> 返回一个新的Array，每个元素为调用func的结果（并没有改变原数组）
+
+```javascript
+var array = 'abcdefg'.split('');
+var newArray = array.map(function (item, index, array) {
+    return item + '=';
+});
+console.log(newArray);
+```
+
+### filter
+
+> 返回一个符合func条件的元素数组（并没有改变原数组）
+
+```javascript
+var array = '12345678'.split('');
+var newArray = array.filter(function (item, index, array) {
+    return item > 3;
+});
+console.log(newArray);
+```
+
+### some
+
+> 返回一个boolean，判断**是否有元素**是否符合func条件(有一个就行)（并没有改变原数组）
+
+```javascript
+var array = '12345678'.split('');
+var res = array.some(function (item, index, array) {
+    console.log(item)
+    return item > 5;
+});
+console.log(res);
+```
+
+### every
+
+> 返回一个boolean，判断每个元素是否符合func条件（所有都判断）（并没有改变原数组）
+
+```javascript
+var array = '12345678'.split('');
+var res = every.every(function (item, index, array) {
+    console.log(item)
+    return item > 5;
+});
+console.log(res);
+```
+
+### findIndex
+
+> 返回搜索到的索引值
+
+```javascript
+var array = '12345678'.split('');
+var index = array.findIndex(function (item, index, array) {
+    return item == '5';
+});
+console.log(index);
+```
+
 
 ## DOM
 
