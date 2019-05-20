@@ -163,9 +163,9 @@ data: {
 <input type="text" v-model="content">
 ```
 
-### v-if
+### v-if v-else v-else-if
 
-> 每次通过DOM操作来删除或者创建元素，**较高的切换性能消耗**
+> 每次通过DOM操作来删除或者创建元素，**较高的切换性能消耗**，`v-else`必须跟在`v-if`或者`v-else-if`的后面，不然失效，`v-else-if`必须要跟在`v-if`后面
 
 ```html
 <h3 v-if="flag">哈哈哈</h3>
@@ -307,7 +307,7 @@ Vue.directive('color-swatch', function (el, binding) {
 ![](E:\Note\Web前端\Vue生命周期.png)
 
 ```javascript
-var vm = new Vue({
+![Vue动画_过渡](E:\Note\Web前端\Vue动画_过渡.png)var vm = new Vue({
     el: '.d',
     data: {},
     //创建期间的生命周期函数↓
@@ -343,4 +343,209 @@ var vm = new Vue({
     }
 })
 ```
+
+## 动画
+
+### 过渡类名
+
+1. 使用`transition`标签（Vue提供的）将需要被动画控制的元素包裹起来
+2. 定义样式![](E:\Note\Web前端\Vue动画_过渡.png)
+
+```html
+/*时间点：进入之前的起始状态*/
+.v-enter,
+/*时间点：离开之后的状态*/
+.v-leave-to {
+    opacity: 0;
+}
+/*入场过程中的时间段*/
+.v-enter-active,
+/*离场过程中的时间段*/
+.v-leave-active {
+    transition: all .4s;
+}
+
+<transition>
+        <h3 v-if="flag">哈哈哈</h3>
+</transition>
+```
+
+> *如果`transition`标签未设置`name`属性，则样式默认是`v-`前缀，如果设置了`name`属性，那么代替`v`*
+
+### 第三方CSS
+
+> 也可以通过对`transition`标签设置类名来接入第三方动画css*
+
+```html
+<transition enter-active-class="animated bounceInLeft"
+                leave-active-class="animated zoomOutLeft">
+        <h3 v-if="flag">哈哈哈</h3>
+</transition>
+```
+
+### 钩子函数
+
+> 可以对`transition`标签设置`v-on`属性
+
+```html
+<transition
+  v-on:before-enter="beforeEnter"
+  v-on:enter="enter"
+  v-on:after-enter="afterEnter"
+  v-on:enter-cancelled="enterCancelled"
+
+  v-on:before-leave="beforeLeave"
+  v-on:leave="leave"
+  v-on:after-leave="afterLeave"
+  v-on:leave-cancelled="leaveCancelled"
+>
+  <!-- ... -->
+</transition>
+
+// ...
+methods: {
+  // 动画入场前的起始样式
+  beforeEnter: function (el) {
+
+  },
+  // 表示动画开始之后的样式，即结束状态
+  enter: function (el, done) {
+	//这句代码是触发重绘	
+	el.offsestWidth
+    // done是afterEnter函数的引用
+    done()
+  },
+  afterEnter: function (el) {
+
+  },
+  enterCancelled: function (el) {
+
+  },
+
+  // --------
+
+  beforeLeave: function (el) {
+
+  },
+  leave: function (el, done) {
+
+    done()
+  },
+  afterLeave: function (el) {
+
+  },
+  // leaveCancelled 只用于 v-show 中
+  leaveCancelled: function (el) {
+    // ...
+  }
+}
+```
+
+- 当只用 JavaScript 过渡的时候，**在 enter 和 leave 中必须使用 done 进行回调**。否则，它们将被同步调用，过渡会立即完成。
+
+- 推荐对于仅使用 JavaScript 过渡的元素添加 `v-bind:css="false"`，Vue 会跳过 CSS 的检测。这也可以避免过渡过程中 CSS 的影响。
+
+### 列表动画
+
+> 在实现列表过渡的时候，如果需要过渡的元素是通过`v-for`创建出来的，需要用`transition-group`包裹，并且每个元素要设置`key`属性
+
+- 为`transition-group`标签设置`appear`属性，实现入场效果
+- 为`transition-group`标签设置`tag='ul'`属性，表示渲染时外部父容器是`ul`元素，如果不指定，会被渲染成`span`
+
+## 组件化
+
+- 模块化是从代码逻辑开进行划分，保证功能模块的职责单一
+- 组件化是从UI界面的角度进行划分，方便代码重用
+- 其中组件名称如果是大小驼峰，在使用过程中需要用小写和`-`拼接，不使用驼峰的话则直接使用即可
+- 组件中的`data`中存放的是函数，返回对象实体
+
+### 方式一
+
+> 使用`extend`方法创建组件
+
+```html
+//第一个参数为组件的名称，也就是将来引用组件时的标签
+//第二个参数为创建的组件
+Vue.component('dataList', Vue.extend({
+	//template为将来要展示的HTML内容
+    template: '<h3>哈哈哈哈哈</h3>'
+}));
+
+<data-list></data-list>
+//or
+
+```
+
+### 方式二
+
+简化版，不管是哪种方式创建出来的组件，`template`指向的模板内容，都只能有一个根元素
+
+```html
+Vue.component('dataList', {
+	//template为将来要展示的HTML内容
+    template: '<h3>哈哈哈哈哈</h3>'
+});
+
+<data-list></data-list>
+```
+
+```
+
+```
+
+### 方式三
+
+> 通过`template`元素，定义组件的HTML模板
+
+```html
+<template id="tmpl1">
+    <div></div>
+</template>
+
+
+Vue.component('dataList', {
+    template: '#tmpl1'
+});
+```
+
+### 私有组件
+
+```javascript
+var vm = new Vue({
+      el: '.d',
+      data: {},
+      components: {
+          login: {
+              template: '<h1>哈哈哈</h1>'
+              //template: '#tmpl1'
+          }
+        }
+  })
+```
+
+### 引入组件
+
+```html
+//1 标签的形式直接使用
+<login></login>
+
+//2 component标签来动态切换
+//login是组件名称
+<component :is="'login'"></component>
+//cName是data中的一个属性
+<component :is="cName"></component>
+```
+
+#### 组件切换的动画
+
+> 将`component`用`transition`包裹起来
+
+```html
+<!--mode属性out-in表示隐藏的组件完全隐藏后再显示要显示的组件-->
+<transition name="component-fade" mode="out-in">
+  <component :is="view"></component>
+</transition>
+```
+
+
 
