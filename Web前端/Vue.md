@@ -472,7 +472,6 @@ Vue.component('dataList', Vue.extend({
 }));
 
 <data-list></data-list>
-//or
 
 ```
 
@@ -545,6 +544,350 @@ var vm = new Vue({
 <transition name="component-fade" mode="out-in">
   <component :is="view"></component>
 </transition>
+```
+
+### 组件间数据传递
+
+#### 父组件传递给子组件数据
+
+> ***核心：通过为子组件设置props数组，配置在子组件标签中使用的属性名称***
+
+```html
+<!--v-bind绑定属性，绑定父组件data中的msg属性-->
+<login :parentmsg="msg"></login>
+
+var vm = new Vue({
+    components: {
+        login: {
+            //子组件默认无法获取到父组件的data，methods等的数据
+            template: '<h2>{{parentmsg}}</h2>',
+            //在这个数组中定义属性名称
+            props: [
+                'parentmsg'
+            ]
+        }
+    }
+})
+```
+
+> 其中`props`属性是**只读**的，`data`中的数据是**可读可写**的
+
+#### 父组件传递给子组件函数 && 子组件传递给父组件数据 or 函数
+
+> ***核心：不能通过`props`来实现了，要通过`v-on`（省略为@）的方式传递，在子组件中通过`this.$emit`来调用***
+
+```html
+<login @parent-fun="callback"></login>
+
+ new Vue({
+        el: '.d',
+        data: { },
+        methods: {
+            callback(arg) {
+                alert('我是父组件的方法，子组件传递了：' + arg)
+            }
+        },
+        components: {
+            login: {
+                //子组件默认无法获取到父组件的data，methods等的数据
+                template: '<div><button @click="myClick">点我点我</button></div>',
+                methods: {
+                    myClick() {
+                        this.$emit('parent-fun', 2333)
+                    }
+                }
+
+            }
+        }
+    });
+```
+
+### 获取子组件或者DOM元素
+
+> ***核心：`ref`属性标记引用地址，在父组件中通过`this.$refs`来获取***
+
+```html
+<div class="d">
+    <button @click="click">点我</button>
+    <p id="art" ref="ppp">{{msg}}</p>
+    <login ref="com_login"></login>
+</div>
+
+
+    var vm = new Vue({
+        el: '.d',
+        data: {
+            msg: '我是父组件的内容',
+        },
+        methods: {
+            click() {
+				//获取到Dom元素
+                console.log(this.$refs.ppp.innerText);
+				//获取到组件
+                console.log(this.$refs.com_login.msg);
+            }
+        },
+        components: {
+            'login': {
+                data() {
+                    return {
+                        msg: '我是子组件的内容'
+                    }
+                },
+                template: '<h3>{{msg}}</h3>'
+            }
+        }
+    });
+```
+
+
+
+## 路由vue-router
+
+1. 导入路由的包
+2. 通过`VuewRouter`构造函数创建路由对象，传入一个配置对象
+3. 在配置对象中对`routes`数组属性（路由匹配规则）进行配置
+4. 每一个路由规则都有两个必须的属性，`path`，`component`
+5. `path`代表监听的路由链接地址，`component`代表组件对象
+
+
+
+```html
+<div id="app">
+    <a href="#/login">登录</a>
+    <a href="#/register">注册</a>
+    <!--路由匹配到的将在这里显示,相当于一个占位符-->
+    <router-view></router-view>
+</div>
+<template id="temp_login"><h1>登录组件</h1></template>
+<template id="temp_register"><h1>注册组件</h1></template>
+<script type="text/javascript">
+    var routerObj = new VueRouter({
+        routes: [
+            {
+                path: '/login',
+                component: {
+                    template: '#temp_login'
+                }
+            },
+            {
+                path: '/register',
+                component: {
+                    template: '#temp_register'
+                }
+            },
+        ]
+    });
+</script>
+```
+
+### router-link
+
+> 也可以通过`<router-link to="/login">登录</router-link>`来导航
+
+- 默认`router-link`会被渲染成`a`标签，可以通过`tag`属性改成其他元素
+- 当前激活的路由类名会默认变成`router-link-active`（可以在`VueRouter`中对`linkActiveClass`属性赋值其他的命名），可以调整样式
+
+
+
+### 重定向
+
+不是指网络资源的重定向，是默认重定向来显示默认路由组件
+
+```javascript
+ routes: [
+            {
+                path: '/', redirect: '/login'
+            },
+            {
+                path: '/login', component: loginC
+            }
+         ]
+```
+
+### 切换动画
+
+> 用`transition`标签包裹
+
+### 传递数据
+
+#### query
+
+> `<router-link to="/login?name=www">登录</router-link>`，对应的：`{{$route.query.name}}`，通过`$route`对象可以获取到
+
+#### params
+
+> **resful**风格，会通过正则自动匹配
+
+```html
+<router-link to="/login/hhh/2333">登录</router-link>
+     
+<h1>登录组件{{this.$route.params.name}}</h1>
+
+
+routes: [
+            {
+                path: '/login/:name/:id',
+                component: loginC
+            }
+]
+```
+
+### 路由嵌套
+
+通过
+
+```html
+<div id="app">
+    <router-link to="/account/login">进入Account组件</router-link>
+    <router-view></router-view>
+</div>
+
+<template id="temp1">
+    <div>
+        <router-link to="/account/login">进入Login组件</router-link>
+        <router-link to="/account/register">进入Register组件</router-link>
+
+        <router-view></router-view>
+    </div>
+</template>
+
+<script type="text/javascript">
+    var routerObj = new VueRouter({
+        routes: [
+            {path: '/', redirect: '/account/login'},
+            {
+                path: '/account', redirect: '/account/login', component: {template: '#temp1'},
+                children: [
+                    //通过children属性配置子级路由，子路由下的path前缀不需要带/，，否则会以根路径开始匹配
+                    {path: 'login', component: {template: '<h2>登录组件</h2>'}},
+                    {path: 'register', component: {template: '<h2>注册组件</h2>'}}
+                ]
+            }
+        ]
+    });
+</script>
+```
+
+### 命名识图来布局
+
+> ***核心：对`routes`数组中的对象，将`component`改用`components`，标记名称，在`router-view`中用`name`属性来指向模板对象***
+
+```html
+<style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body, #app {
+            height: 100%;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            height: 100px;
+            background-color: pink;
+        }
+
+        .c {
+            display: flex;
+            flex: 1;
+        }
+
+        .left-nav {
+            width: 200px;
+            background-color: blue;
+        }
+
+        .main {
+            flex: 1;
+        }
+</style>
+
+<div id="app">
+    <!--其中带冒号修饰时，要区分是属性还是字符串-->
+    <!--不带冒号修饰时，都当成字符串-->
+    <router-view :name="'header'"></router-view>
+    <div class="c">
+        <router-view name="leftNav"></router-view>
+        <router-view name="main"></router-view>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var routerObj = new VueRouter({
+        routes: [
+            {
+                path: '/', components: {
+                    //当前路径下显示多个路由组件
+                     'header': {template: '<h1 class="header">我是Header</h1>'},
+                    'leftNav': {template: '<h1 class="left-nav">我是左侧导航栏</h1>'},
+                    main: {template: '<h1 class="main">我是主体</h1>'},
+                }
+            }
+        ]
+    });
+
+    var vm = new Vue({
+        el: '#app',
+        router: routerObj
+    });
+```
+
+## 数据监听
+
+> 除了对标签元素监听按键抬起的方式以外，还可以监听数据的变化，并且能监听路由地址的改变
+
+```javascript
+new Vue({
+        el: '#app',
+        data: {
+            str: ''
+        },
+        watch: {
+            //监听str数据的改变
+            str: function (newVal,oldVal) {
+              
+            },
+            //监听路由地址的改变
+            '$route.path': function (newVal, oldVal) {
+                console.log(oldVal + '----' + newVal);
+            }
+        }
+})
+```
+
+## 计算属性
+
+> 在模板中不应该有太复杂的计算逻辑，可以放到计算属性中`<p>message: "{{ reversedMessage}}"</p>`（不需要加引号），和`methods`的区别在于，**计算属性具有缓存性，当依赖于计算属性的属性发生改变时，会响应式的刷新**
+
+```javascript
+var vm = new Vue({
+  el: '#app',
+  data: {
+    message: 'wwwww'
+  },
+  computed: {
+    reversedMessage: function () {
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+```
+
+```javascript
+//下面的计算属性不会发生更新，因为缓存了
+computed: {
+  now: function () {
+    return Date.now()
+  }
+}
 ```
 
 
