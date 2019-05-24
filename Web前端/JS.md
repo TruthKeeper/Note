@@ -751,5 +751,63 @@ f = null;
 
 > 块级作用域，
 
-### =>
+### 箭头函数=>
+
+```javascript
+var obj = {
+  data: function (arg1, arg2) {
+    return arg1 + arg2
+  }
+}
+//可缩写成如如下
+var obj = {
+  data: (arg1, arg2) => {
+    return arg1 + arg2
+  }
+}
+//一个形参时还可以缩写
+var obj = {
+  data: arg1 => {
+    return JSON.stringify(arg1)
+  }
+}
+//省略return的方式
+var obj = {
+  data: arg1 => JSON.stringify(arg1)
+}
+```
+
+### 导入和导出模块
+
+#### 导入
+
+```javascript
+//导入模块
+import 模块名称 from '模块标志符' or '路径'
+//导入外部的变量或者函数
+import {firstName, lastName as newName, year} from './profile'
+//导入模块，并立即执行，除了export
+import './test'
+```
+
+#### 导出
+
+```javascript
+//在一个模块中只能出现一次，向外暴露的成员可以用任意变量来接受
+export default {
+    
+}
+//import {str, f} from './testModule'，按需导出的方式，必须严格按照导出的命名来接受，或者在导入的时候用as来取别名
+export const str = 'hello world'
+
+export function f(a){
+    return a+1
+}
+```
+
+
+
+
+
+
 

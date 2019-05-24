@@ -1,5 +1,22 @@
 # Vue
 
+## Webpack中使用
+
+1. 安装`vue`的包
+2. 安装解析`vue`组件模板的`loader`
+3. 在入口`main.js`中导入`vue`模块`import Vue from 'vue'`
+4. 定义一个以`.vue`结尾的组件，`.vue`组件由三部分组成，`template`，`script`，`style`
+5. 在入口`main.js`中导入这个`vue`组件
+6. 创建`vm`实例
+7. 在页面中创建标签以供`vm`绑定
+
+### Ps
+
+- `.vue`文件中的`style`可以设置`lang="less"`启用`less`预编译，`scoped`属性表示仅在该容器中应用样式，核心原理是通过属性选择器实现的
+- 
+
+
+
 ## 标签属性
 
 ### v-cloak
