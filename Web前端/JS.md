@@ -227,6 +227,7 @@ var p = new Person();
 
 - `push`：接受任意数量的参数，将其添加到数组末尾，返回数组的新长度
 - `pop`：移除末尾项，会减少数组额length，并且返回移除的项
+- `concat`：将当期数组拷贝一份，将传入的任意参数添加至末尾后，返回新数组（不会影响原有数组），如果参数是数组，会展开一级数组
 - `shift`：删除数组的第一项
 - `unshift`：接受任意数量的参数，将其添加到数组开头，返回数组的新长度
 
@@ -235,7 +236,6 @@ var p = new Person();
 - `join`：将数组元素以分隔符的形式拼接成字符串
 - `sort`：默认将每一项转换成字符串后按升序排列，可传入两参的function自定义排序
 - `reverse`：反转数组
-- `concat`：将当期数组拷贝一份，将传入的任意参数添加至末尾后，返回新数组（不会影响原有数组），如果参数是数组，会展开一级数组
 
 
 - `slice`：接受一个或两个参数，返回从指定下标到结束下标的新数组
@@ -805,9 +805,76 @@ export function f(a){
 }
 ```
 
+### Promise
+
+> 为了解决回调地狱的一种方案
+
+- `Promise`是一个构造函数
+- 在`Promise`中，有两个函数，`resolve`：成功之后的回调函数，`reject`：失败之后的回调函数
+- 在`Promise`的原型属性上，有一个`then`方法 
+- `Promise`表示一个异步操作（语义上），每当新建一个实例的时候，就表示一个具体的异步操作，无法return结果，只能通过回调函数的形式
+- 每当创建一个`Promise`实例的时候，就会执行传递进去的`function`代码（通过`then`方法传递回调的`function`）
+- 如果在`then`方法中不传入失败的`reject`，那么链式结构不会继续下去，也可以在最后用`catch`方法（有错误就全部跳出）
 
 
 
+```javascript
+function getP () {
+  return new Promise(function (resolve, reject) {
+    let sum = 0
+    for (let i = 0; i < 10; i++) {
+      sum += Math.random()
+    }
+    if (sum > 5) {
+      resolve(sum)
+    } else {
+      reject('error')
+    }
+  })
+}
+
+getP()
+  .then(function (data) {
+    console.log(data)
+    //返回一个新的Promise
+    return getP()
+  }, function (error) {
+    console.log(error)
+  })
+  .then(function (data) {
+    console.log('success')
+    console.log(data)
+  }, function (error) {
+    console.log(error)
+  })
+```
+
+
+
+### 形参默认值
+
+> 为形参加上等号
+
+```javascript
+function test(x = 1, y = 2) {
+    console.log("x："+x ,"y："+ y);
+}
+test();
+test(100);
+
+```
+
+```javascript
+
+//这是一种可以不按照形参定义顺序传值的写法
+function test({x = 1 ,y = 2} = {}) {
+    console.log("x："+x ,"y："+ y);
+}
+test();
+test({y:100,x:200});
+test({x:100});
+
+```
 
 
 
