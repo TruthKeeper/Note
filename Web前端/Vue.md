@@ -83,6 +83,14 @@ data: {
 },
 ```
 
+### v-pre
+
+> 跳过该标签元素的编译过程，用来显示原本的`Mustache `标签
+
+```html
+<span v-pre>{{ this will not be compiled }}</span>
+```
+
 ### v-for
 
 > *注意：在多次更新元素列表的场景下，设置`v-bind:key=''`属性来提高刷新效率，只能用Number和String*
@@ -469,6 +477,56 @@ methods: {
 - 为`transition-group`标签设置`appear`属性，实现入场效果
 - 为`transition-group`标签设置`tag='ul'`属性，表示渲染时外部父容器是`ul`元素，如果不指定，会被渲染成`span`
 
+## 数据监听
+
+> 除了对标签元素监听按键抬起的方式以外，还可以监听数据的变化，并且能监听路由地址的改变
+
+```javascript
+new Vue({
+        el: '#app',
+        data: {
+            str: ''
+        },
+        watch: {
+            //监听str数据的改变
+            str: function (newVal,oldVal) {
+              
+            },
+            //监听路由地址的改变
+            '$route.path': function (newVal, oldVal) {
+                console.log(oldVal + '----' + newVal);
+            }
+        }
+})
+```
+
+## 计算属性
+
+> 在模板中不应该有太复杂的计算逻辑，可以放到计算属性中`<p>message: "{{ reversedMessage}}"</p>`（不需要加引号），和`methods`的区别在于，**计算属性具有缓存性，当依赖于计算属性的属性发生改变时，会响应式的刷新**
+
+```javascript
+var vm = new Vue({
+  el: '#app',
+  data: {
+    message: 'wwwww'
+  },
+  computed: {
+    reversedMessage: function () {
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+```
+
+```javascript
+//下面的计算属性不会发生更新，因为缓存了
+computed: {
+  now: function () {
+    return Date.now()
+  }
+}
+```
+
 ## 组件化
 
 - 模块化是从代码逻辑开进行划分，保证功能模块的职责单一
@@ -659,7 +717,7 @@ var vm = new Vue({
 
 
 
-## 路由vue-router
+## => 路由vue-router
 
 1. 导入路由的包
 2. 通过`VuewRouter`构造函数创建路由对象，传入一个配置对象
@@ -698,12 +756,46 @@ var vm = new Vue({
 </script>
 ```
 
-### router-link
+### 跳转
+
+#### router-link
 
 > 也可以通过`<router-link to="/login">登录</router-link>`来导航
 
 - 默认`router-link`会被渲染成`a`标签，可以通过`tag`属性改成其他元素
 - 当前激活的路由类名会默认变成`router-link-active`（可以在`VueRouter`中对`linkActiveClass`属性赋值其他的命名），可以调整样式
+
+#### 编程式
+
+> 注意：`$route`代表路由参数对象，可以获取到`query`，`param`，而`$router`是路由导航对象，用来实现路由的前进、后退和跳转操作
+
+##### push
+
+> 跳转导航，会向`history`生成一条记录
+
+```javascript
+//最简单的方式
+this.$router.push('/account' + 123)
+//对象的方式
+this.$router.push({path: '/account?id' + 123})
+//查询的方式
+this.$router.push({path: '/account', query: {id: '321'}})
+//带命名的路由,其中 path 不能和 params 一起用
+this.$router.push({name: 'Account', params: {id: '123'}})
+```
+
+##### replace
+
+和push很相似，唯一区别在于不会向`history`添加新纪录
+
+##### go
+
+```js
+// 在浏览器记录中前进一步，等同于 history.forward()
+router.go(1)
+// 后退一步记录，等同于 history.back()
+router.go(-1)
+```
 
 
 
@@ -857,54 +949,47 @@ routes: [
     });
 ```
 
-## 数据监听
 
-> 除了对标签元素监听按键抬起的方式以外，还可以监听数据的变化，并且能监听路由地址的改变
 
-```javascript
-new Vue({
-        el: '#app',
-        data: {
-            str: ''
-        },
-        watch: {
-            //监听str数据的改变
-            str: function (newVal,oldVal) {
-              
-            },
-            //监听路由地址的改变
-            '$route.path': function (newVal, oldVal) {
-                console.log(oldVal + '----' + newVal);
-            }
-        }
-})
-```
+## => Vuex
 
-## 计算属性
+> 一个公共数据管理工具，可以将一些**共享**的数据保存到vuex中，方便整个程序中任何组件直接访问到这些公共数据
 
-> 在模板中不应该有太复杂的计算逻辑，可以放到计算属性中`<p>message: "{{ reversedMessage}}"</p>`（不需要加引号），和`methods`的区别在于，**计算属性具有缓存性，当依赖于计算属性的属性发生改变时，会响应式的刷新**
+> 为了解决**多层组件嵌套**、**兄弟组件**场景下数据传递问题
+
+1. 导入Vuex
+2. 在入口js中创建一个Vuex.Store实例
+3. 绑定到Vue实例下
 
 ```javascript
-var vm = new Vue({
-  el: '#app',
-  data: {
-    message: 'wwwww'
+const store = new Vuex.Store({
+  //可以当成组件下的data
+  state: {
+    //组件中通过$store.state.count来访问
+    //不建议组件直接修改值，如果造成问题会难以跟踪 
+    count: 0
   },
-  computed: {
-    reversedMessage: function () {
-      return this.message.split('').reverse().join('')
-    }
+  //可以当成组件下的methods
+  mutations: {
+      //如果组件想要调用方法，通过this.$store.commit('方法名' , arg),方法最多两个参数
+      increase(state){
+          state.count++;
+      }	
+  },
+  //类似组件中的computed计算属性（会缓存），只要state数据发生变化，getters也随之重新求值
+  //也类似过滤器，对数据做了一层包装
+  getters: {
+      optCount:function(state){
+          return '当前的值是：'+state.count;
+      }
   }
 })
-```
 
-```javascript
-//下面的计算属性不会发生更新，因为缓存了
-computed: {
-  now: function () {
-    return Date.now()
-  }
-}
+var vm=new Vue({
+  el: '#app',
+  render: c => c(App),
+  store,
+})
 ```
 
 
