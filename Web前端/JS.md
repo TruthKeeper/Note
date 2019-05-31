@@ -876,5 +876,27 @@ test({x:100});
 
 ```
 
+### 对象属性的声明
+
+> 当属性的`key`和变量的名相同时，而要使用变量的值做`value`，就可以直接简写
+
+```javascript
+var name = 'abc'
+var person = {
+  //简写name : name
+  name
+}
+
+var obj = {
+  fun1: function (a, b) {
+    return a + b
+  },
+  //简写如下
+  fun2 (a, b) {
+    return a + b
+  }
+}
+```
+
 
 

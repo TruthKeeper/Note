@@ -358,6 +358,8 @@ p {
 - `cover`：类似Android的CenterCrop，缩放到始终填充背景区域
 - `contain`：自动调整比例，保证图片完整显示在背景区域当中
 
+> Ps: `img`标签控制图片位置的属性是`object-fit`
+
 #### CSS3：背景渐变
 
 > 兼容性较差

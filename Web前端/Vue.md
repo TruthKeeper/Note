@@ -526,6 +526,16 @@ computed: {
   }
 }
 ```
+```javascript
+//传递参数的场景
+computed: {
+ isFuli: function () {
+        return function (data) {
+          return data.type === '福利';
+        }
+      }
+}
+```
 
 ## 组件化
 
@@ -554,7 +564,7 @@ Vue.component('dataList', Vue.extend({
 
 简化版，不管是哪种方式创建出来的组件，`template`指向的模板内容，都只能有一个根元素
 
-```html
+​```html
 Vue.component('dataList', {
 	//template为将来要展示的HTML内容
     template: '<h3>哈哈哈哈哈</h3>'
@@ -625,7 +635,7 @@ var vm = new Vue({
 
 #### 父组件传递给子组件数据
 
-> ***核心：通过为子组件设置props数组，配置在子组件标签中使用的属性名称***
+> ***核心：通过为子组件设置props数组，配置在子组件标签中使用的属性名称；子组件不要去修改来自父组件的数据***
 
 ```html
 <!--v-bind绑定属性，绑定父组件data中的msg属性-->
@@ -760,7 +770,9 @@ var vm = new Vue({
 
 #### router-link
 
-> 也可以通过`<router-link to="/login">登录</router-link>`来导航
+> 可以通过`<router-link to="/login">登录</router-link>`来导航，
+>
+> 或者`<router-link :to="{name:'login',params:{id:'123'}}">登录</router-link>`
 
 - 默认`router-link`会被渲染成`a`标签，可以通过`tag`属性改成其他元素
 - 当前激活的路由类名会默认变成`router-link-active`（可以在`VueRouter`中对`linkActiveClass`属性赋值其他的命名），可以调整样式
