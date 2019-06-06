@@ -182,7 +182,7 @@ h1 + p {
 
 | 选择器  |   例子   |   描述   |
 | ---- | ---- | ---- |
-|   `:first-letter`   |   `p:first-letter`   |  选择每个p元素的首字母|
+|   `:first-letter`   |   `p:first-letter`   | 选择每个p元素的首字母，**注意：行内元素时无效，例如span** |
 |   `:first-line`   |   `p:first-line`   |   选择每个p元素的首行   |
 |   `:first-child`   |   `p:first-child`| 选择属于父元素的第一个子元素的每个p元素|
 |   **CSS3**`:last-child`   |   `p:last-child`| 选择属于父元素的最后一个子元素的每个p元素|

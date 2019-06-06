@@ -19,6 +19,14 @@
 
 ## 标签属性
 
+### v-once
+
+> 该数据节点的数据不会再次刷新，只执行一次性插值
+
+```html
+<span v-once>这个将不会改变: {{ msg }}</span>
+```
+
 ### v-cloak
 
 > 能够解决表达式在未解析之前显示出来的问题
@@ -110,6 +118,20 @@ data: {
 
 ```
 
+#### key的其他场景
+
+```html
+<!--如下代码在loginType切换时，input标签中的内容不会发生变化，因为未对其设置key属性，vue会将其当做是可复用的元素-->
+<template v-if="loginType === 'username'">
+  <label>Username</label>
+  <input placeholder="Enter your username">
+</template>
+<template v-else>
+  <label>Email</label>
+  <input placeholder="Enter your email address">
+</template>
+```
+
 
 
 ### v-on 缩写@
@@ -186,6 +208,8 @@ data: {
 
 ```html
 <input type="text" v-model="content">
+<!--等价于-->
+<input type="text" :value="con" @input="con = $event.target.value">
 ```
 
 ### v-if v-else v-else-if
@@ -564,7 +588,7 @@ Vue.component('dataList', Vue.extend({
 
 简化版，不管是哪种方式创建出来的组件，`template`指向的模板内容，都只能有一个根元素
 
-​```html
+```html
 Vue.component('dataList', {
 	//template为将来要展示的HTML内容
     template: '<h3>哈哈哈哈哈</h3>'
@@ -635,9 +659,9 @@ var vm = new Vue({
 
 #### 父组件传递给子组件数据
 
-> ***核心：通过为子组件设置props数组，配置在子组件标签中使用的属性名称；子组件不要去修改来自父组件的数据***
+> ***核心：通过为子组件设置props数组，配置在子组件标签中使用的属性名称；子组件不要去修改来自父组件的数据，改了也没用，单向下行绑定***
 
-```html
+​```html
 <!--v-bind绑定属性，绑定父组件data中的msg属性-->
 <login :parentmsg="msg"></login>
 
@@ -650,6 +674,10 @@ var vm = new Vue({
             props: [
                 'parentmsg'
             ]
+			//如下的写法可以规范传值类型
+			props: {
+                'parentmsg':String
+            }
         }
     }
 })
