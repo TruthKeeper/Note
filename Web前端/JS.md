@@ -745,6 +745,30 @@ f = null;
 - 获取分：`new Date().getMinutes()`
 - 获取秒：`new Date().getSeconds()`
 
+## this关键字
+
+```javascript
+let fn = function(){
+  alert(this.name)
+}
+let obj = {
+  name: '',
+  fn
+}
+fn() // 方法1
+obj.fn() // 方法2
+fn.call(obj) // 方法3
+let instance = new fn() // 方法4
+
+```
+
+1. 方法1，**默认绑定**，this指向了window
+2. 方法2，**隐式绑定**，this指向点前面的对象
+3. 方法3，**显示绑定**，利用call或者apply函数，将this的指向了第一个参数，即obj
+4. 方法4，**new绑定**，实例化对象的时候，将this指向了实例对象
+
+上述规则的优先级是递增关系
+
 ## ES6
 
 ### let关键字
@@ -752,6 +776,8 @@ f = null;
 > 块级作用域，
 
 ### 箭头函数=>
+
+> 会捕获其所在上下文的 this 值，作为自己的 this 值
 
 ```javascript
 var obj = {

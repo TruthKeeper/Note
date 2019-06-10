@@ -661,7 +661,7 @@ var vm = new Vue({
 
 > ***核心：通过为子组件设置props数组，配置在子组件标签中使用的属性名称；子组件不要去修改来自父组件的数据，改了也没用，单向下行绑定***
 
-​```html
+```html
 <!--v-bind绑定属性，绑定父组件data中的msg属性-->
 <login :parentmsg="msg"></login>
 
@@ -713,6 +713,38 @@ var vm = new Vue({
             }
         }
     });
+```
+
+#### 兄弟组件之间传值
+
+> 不用vuex的方案：可以通过实例化一个vue对象作为Bus，要相互通信的兄弟组件都引入Bus，分别调用Bus的事件触发和监听来实现通信
+
+```javascript
+//Bus.js
+import Vue from 'vue'
+export default new Vue()
+
+//发送端
+import Bus from '../bus.js'
+export default{
+	methods: {
+	    toBus () {
+	        Bus.$emit('on', '来自兄弟组件')
+	    }
+	  }
+}
+
+//接收端
+import Bus from '../bus.js'
+export default {
+    mounted() {
+       Bus.$on('on', (msg) => {
+         console.log(msg)
+       })
+     }
+   }
+
+ 
 ```
 
 ### 获取子组件或者DOM元素

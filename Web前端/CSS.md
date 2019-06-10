@@ -236,7 +236,7 @@ h1 + p {
 ```
 ## 要点
 
-### 外边距问题
+### > 外边距问题
 
 #### 块级盒子居中对齐
 
@@ -245,12 +245,40 @@ h1 + p {
 
 #### 避免上元素margin-bottom和下元素margin-top
 
-### 行内块直接的间隙
+### > 行内块直接的间隙
 
 - `float` 
 - `position`
 - 标签之间不加任何的空格和换行
 - 为父元素设置`font-size:0`，再为子元素设置单独的字体大小
+
+### > 水平居中的方式
+
+1. 行内元素（包括行内块）为父元素设置 `text-align: center`即可
+2. 如果是块级元素，为该元素设置 `margin: 0 auto`
+3. 如果子元素包含**浮动**属性，为父元素设置 `width: fit-content; margin: 0 auto;`
+4. 利用**flex布局**，为父元素设置 `display: flex;justify-content: center;`
+5. 利用**定位**，为元素设置 `position: absolute;left: 0;right: 0;margin: 0 auto;`
+6. 利用**定位**和**transform**，为元素设置 `position: absolute;left: 50%;transform: translateX(-50%);`
+
+### > 垂直居中的方式
+
+1. 文本标签可以设置`line-height`等于父元素的高度
+2. 如果是行内块元素，可以通过**vertical-align**和**伪元素**的方式实现
+```css
+    .parent::after ,.son {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .parent::after{
+        content: '';
+        height: 100%;
+    }
+```
+3. 利用**flex布局**，为父元素设置`display: flex;align-items: center;`
+4. 利用**定位**，为元素设置 `position: absolute;top: 0;bottom: 0;margin: auto 0;`
+5. 利用**定位**和**transform**，为元素设置 `position: absolute;top: 50%;transform: translateY(-50%);`
+
 
 
 ## 属性
