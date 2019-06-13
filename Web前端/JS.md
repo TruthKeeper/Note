@@ -769,15 +769,85 @@ let instance = new fn() // 方法4
 
 上述规则的优先级是递增关系
 
+### 解析
+
+```javascript
+var number = 5;
+var obj = {
+    number: 3,
+    fn: (function () {
+        var number;
+        this.number *= 2;
+        number = number * 2;
+        number = 3;
+        return function () {
+            var num = this.number;
+            this.number *= 2;
+            console.log(num);
+            number *= 3;
+            console.log(number);
+        }
+    })()
+}
+var myFun = obj.fn;
+myFun.call(null);
+obj.fn();
+console.log(window.number);
+```
+
+#### fn自调用函数
+
+> 即默认绑定，this的环境是window
+
+```javascript
+var number;//在闭包中定义了一个number
+this.number *= 2;//即window.number*=2 ,window.number变成了10
+number = number * 2;//还未赋值，无效，number变成了NaN
+number = 3;//number赋值为3
+```
+
+#### myFun.call(null)
+
+> 传的参数为null，即默认绑定，this的环境是window
+
+```javascript
+var num = this.number;//在闭包中定义了一个num,赋值为window.number的值，即10
+this.number *= 2;//即window.number*=2 ,window.number变成了20
+console.log(num);//打印10
+number *= 3;//闭包中的number*=3， 3*3=9
+console.log(number);//打印9
+```
+
+#### obj.fn()
+
+> 隐式绑定，this指向obj对象
+
+```javascript
+var num = this.number;//在闭包中定义了一个num,赋值为obj.number的值，即3
+this.number *= 2;//即obj.number*=2 ,obj.number变成了6
+console.log(num);//打印3
+number *= 3;//闭包中的number*=3， 9*3=27
+console.log(number);//打印27
+```
+
+#### console.log(window.number)
+
+> 输出20
+
+
 ## ES6
 
 ### let关键字
 
-> 块级作用域，
+> 块级作用域
+
+- let 和 const 定义的变量不会出现变量提升，而 var 定义的变量会提升
+- let 和 const 不允许重复声明(会抛出错误)
+- let 和 const 定义的变量在定义语句之前，如果使用会抛出错误(形成了暂时性死区)，而 var 不会
 
 ### 箭头函数=>
 
-> 会捕获其所在上下文的 this 值，作为自己的 this 值
+> 会捕获其所在上下文的 this 值，作为自己的 this 值，箭头函数没有原型属性
 
 ```javascript
 var obj = {
@@ -924,5 +994,49 @@ var obj = {
 }
 ```
 
+### class定义对象
 
+```javascript
+class Person {
+  constructor(name = "yuese", id = 1) {
+    this.name = name;
+    this.id = id;
+  }
+  say() {
+    console.log("I am " + this.name);
+  }
+}
+Person.prototype.talk = function() {
+  console.log("My id is " + this.id);
+};
+var p = new Person("www");
+p.say();
+p.talk();
+```
+
+
+
+### 解构赋值
+
+#### 方便取值
+
+```javascript
+let obj = {
+    a: 123,
+    b: "www",
+    c: true
+};
+let {a, c} = obj;//let {a:num, c:flag} = obj;  为a赋值到新的变量num中
+console.log(a + ' ' + c);
+```
+
+#### 交换值
+
+```javascript
+[a,b]=[b,a]
+```
+
+### rest参数
+
+> **...args**，Rest就是为解决传入的参数数量不一定， rest parameter(Rest 参数) 本身就是数组，数组的相关的方法都可以用
 

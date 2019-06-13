@@ -279,6 +279,28 @@ h1 + p {
 4. 利用**定位**，为元素设置 `position: absolute;top: 0;bottom: 0;margin: auto 0;`
 5. 利用**定位**和**transform**，为元素设置 `position: absolute;top: 50%;transform: translateY(-50%);`
 
+### > 文本单行显示，后面的...
+
+ ```css
+/*1.强制在同一行内显示所有文本*/
+white-space: nowrap;
+/*2.超出父元素区域隐藏*/
+overflow: hidden;
+/*3.溢出部分省略号*/
+text-overflow: ellipsis;
+ ```
+
+### > 文本最多显示n行，后面的...
+```css
+/*超出父元素区域隐藏*/
+overflow: hidden;
+/*溢出部分省略号*/
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: n;
+```
+
 
 
 ## 属性
@@ -368,6 +390,19 @@ p {
 - **underline**：下划线
 - **overline**：上划线
 - **line-througn**：删除线
+
+### 字符大小写：text-transform
+
+- **none**：无效果
+- **uppercase**：全部大写
+- **lowercase**：全部小写
+- **capitalize**：首字母大写
+
+### 文字间距：letter-spacing
+
+```css
+h1{letter-spacing: 1em}
+```
 
 ### 背景：background
 
@@ -591,6 +626,14 @@ div {
     }
     100% {
         margin-left: 20px;
+    }
+}
+@keyframes anim2 {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: 30px;
     }
 }
 ```

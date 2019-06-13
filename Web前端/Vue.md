@@ -676,14 +676,17 @@ var vm = new Vue({
             ]
 			//如下的写法可以规范传值类型
 			props: {
-                'parentmsg':String
+                'pro1':{
+  				 type:Number,
+  				 default:100//require: true 必传
+				}
             }
         }
     }
 })
 ```
 
-> 其中`props`属性是**只读**的，`data`中的数据是**可读可写**的
+> 默认情况下`props`属性是**只读**（单向数据传递）的，`data`中的数据是**可读可写**的，可以在子组件声明`props`时添加**.sync**修饰，`:pMsg.sync="msg"`，然后子组件通过`this.$emit("update:pMsg", newV)`来更新父组件的`pMsg`属性
 
 #### 父组件传递给子组件函数 && 子组件传递给父组件数据 or 函数
 
@@ -715,6 +718,10 @@ var vm = new Vue({
     });
 ```
 
+#### 父组件调用子组件函数
+
+> 通过对子组件设置`ref`属性，然后通过`this.$refs.***`直接调用
+
 #### 兄弟组件之间传值
 
 > 不用vuex的方案：可以通过实例化一个vue对象作为Bus，要相互通信的兄弟组件都引入Bus，分别调用Bus的事件触发和监听来实现通信
@@ -738,7 +745,7 @@ export default{
 import Bus from '../bus.js'
 export default {
     mounted() {
-       Bus.$on('on', (msg) => {
+       Bus.$on('on', (msg) => {//不用箭头函数的话无法定位到this
          console.log(msg)
        })
      }
@@ -783,6 +790,16 @@ export default {
             }
         }
     });
+```
+
+
+
+### 监听组件的生命周期
+
+其余`created`事件也都可以监听到
+
+```html
+<Child @hook:mounted="doSomething"/>
 ```
 
 
