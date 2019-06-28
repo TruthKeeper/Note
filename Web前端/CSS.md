@@ -156,6 +156,10 @@ a, p {
 h1 + p {
 	color: red;
 }
+/*常见用法，猫头鹰选择器，所有兄弟都有上边距*/
+* + * {
+  margin-top: 10px;
+}
 ```
 
 ### 属性选择器
@@ -183,10 +187,12 @@ h1 + p {
 | 选择器  |   例子   |   描述   |
 | ---- | ---- | ---- |
 |   `:first-letter`   |   `p:first-letter`   | 选择每个p元素的首字母，**注意：行内元素时无效，例如span** |
-|   `:first-line`   |   `p:first-line`   |   选择每个p元素的首行   |
+|   `:first-line`   |   `p:first-line`   |   选择每个p元素的首行，**注意：行内元素时无效，例如span**   |
 |   `:first-child`   |   `p:first-child`| 选择属于父元素的第一个子元素的每个p元素|
 |   **CSS3**`:last-child`   |   `p:last-child`| 选择属于父元素的最后一个子元素的每个p元素|
-|   **CSS3**`:nth-child(n)`   | `p:nth-child(2|3n|odd|even)` | 选择属于其父元素的第二个子元素的每个p元素，选择3的倍数，选择奇数，选择偶数 |
+|   **CSS3**`:nth-child(n)`   | `p:nth-child(2|3n|odd|even|n+2|-n+2)` | 选择属于其父元素的第二个子元素的每个p元素，选择3的倍数，选择奇数，选择偶数，选择从第2项开始，选择1-2项 |
+| **CSS3**`:not` | `p:not(:last-child)` | 选择除了最后一项的p元素，not中传递选择器 |
+
 
 
 ### 伪元素选择器
@@ -301,6 +307,20 @@ display: -webkit-box;
 -webkit-line-clamp: n;
 ```
 
+### > 固定比例的盒子
+
+核心要点是通过设置高度为`0`和`padding-bottom`
+
+```css
+.container {
+  width: 100px;
+  height: 0;
+  /*这是一个宽高比例2:1的盒子*/
+  padding-bottom: calc(100px /2);
+  background-color: red;
+}
+```
+
 
 
 ## 属性
@@ -404,6 +424,18 @@ p {
 h1{letter-spacing: 1em}
 ```
 
+#### 空格间距
+
+> 字符串之间空格间距增加
+
+```html
+<p style="word-spacing:10px">哈哈&nbsp;哈哈</p>
+```
+
+### 文本选择
+
+`user-select: none` 禁止选择文本
+
 ### 背景：background
 
 > `background`连写顺序如下
@@ -413,7 +445,7 @@ h1{letter-spacing: 1em}
 - 背景重复：`background-repeat:repeat|no-repeat|repeat-x|repeat-y`
 - 背景固定：`background-attachment:fixed|scroll`
 - 背景定位：`background-position: 10px 50px` ***Y坐标不写默认垂直居中***
-- 背景图像占区域比例：`background-size` `/50%` 斜杠后
+- 背景图像占区域比例：`background-size` `/50%` 斜杠后 或者  / 20px 50px 
 
 #### CSS3：背景缩放：background-size
 
@@ -477,23 +509,6 @@ h1{letter-spacing: 1em}
 - 嵌套块级元素垂直外边距会发生合并，可通过设置border-top or padding-top 或者为父级元素设置`overflow: hidden`属性来避免
   ![](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_2.gif)
 
-### CSS3：圆角：border-radius
-
-> 多个参数时代表左上、右上、右下、左下，设置为50%即为圆形
-
-### CSS3：盒子阴影：box-shadow
-
-- 阴影水平X轴
-- 阴影水平Y轴
-- 阴影的模糊距离
-- 阴影的尺寸
-- 阴影的颜色
-- inset：内阴影
-
-### CSS3：透明度：opacity
-
-`opacity: .5`
-
 ### 显示和隐藏
 
 - `display：none`：隐藏，**不占位置**
@@ -501,7 +516,7 @@ h1{letter-spacing: 1em}
 - `visibilty:hidden`：隐藏，但**仍占位置**
 - `visibilty:visible`：可见
 
-### 显示溢出
+### 显示溢出：overflow
 
 - `overflow: visible`：默认，显示超出父元素的内容
 - `overflow: hidden`：隐藏超出父元素的内容
@@ -513,7 +528,7 @@ h1{letter-spacing: 1em}
 > #### 设置显示方式：white-space
 
 - `normal`：默认，会换行
-- `nowrap`：强制在同一行内显示所有文本，知道文本结束或者遭遇&lt;br&gt;才换行
+- `nowrap`：强制在同一行内显示所有文本，直到文本结束或者遭遇&lt;br&gt;才换行
 
 #### 溢出处理：text-overflow
 
@@ -568,7 +583,22 @@ text-overflow: ellipsis;
   }
 ```
 
+### CSS3：圆角：border-radius
 
+> 多个参数时代表左上、右上、右下、左下，设置为50%即为圆形
+
+### CSS3：盒子阴影：box-shadow
+
+- 阴影水平X轴
+- 阴影水平Y轴
+- 阴影的模糊距离
+- 阴影的尺寸
+- 阴影的颜色
+- inset：内阴影
+
+### CSS3：透明度：opacity
+
+`opacity: .5`
 
 ### CSS3：过渡：transition
 
@@ -725,7 +755,10 @@ h4 {
 }
 ```
 
+### CSS3：函数
 
+- **attr**：返回元素的属性值，通常用于`::before`和`::after`的`content`中`content: attr(href)`
+- **calc**：计算CSS的属性值，例如`calc(100% - 20px)`
 
 
 ## 浮动：float

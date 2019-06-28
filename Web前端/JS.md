@@ -220,13 +220,43 @@ var p = new Person();
 ## 字符串String
 
 - `padStart`：补全函数，传递补全的位数和补全的字符串，从字符串开头开始，`padEnd`从字符串尾开始
-- 
+- `indexOf`：查询字符串中指定字符串的索引，函数第二个参数表示开始查询的下标
+- `includes`：返回字符串中是否包含指定字符串，函数第二个参数表示开始查询的下标
+- `startsWith`：是不是以某个字符串作为开头，`endswith`，是不是某个字符串作为结尾
+- `repeat`：将字符串重复几遍返回，源字符串不变
 
 ## 数组Array
 
+[JavaScript数组所有API全解密](https://juejin.im/post/5902d56e1b69e60058c634d6)
 
-- `push`：接受任意数量的参数，将其添加到数组末尾，返回数组的新长度
-- `pop`：移除末尾项，会减少数组额length，并且返回移除的项
+### 判断是否是一个数组
+
+```javascript
+var a = [];
+// 1.基于instanceof
+a instanceof Array;
+// 2.基于constructor
+a.constructor === Array;
+// 3.基于Object.prototype.isPrototypeOf
+Array.prototype.isPrototypeOf(a);
+// 4.基于getPrototypeOf
+Object.getPrototypeOf(a) === Array.prototype;
+// 5.基于Object.prototype.toString
+Object.prototype.toString.apply(a) === '[object Array]';
+
+function P () { }
+P.prototype = Array.prototype
+var a = new P()
+
+```
+
+> 上述前4种在修改原型链后都返回`true`，所以判断是否是一个数组的标准方式应该是`Object.prototype.toString.apply(a) === '[object Array]'`或者ES6中的`Array.isArray`
+
+### 常见API
+
+
+- `push`：接受任意数量的参数，将其添加到数组末尾，返回数组的新长度，可以通过`Array.prototype.push.apply(array,array2)`来实现数组合并
+- `pop`：移除末尾项，会减少数组的length，并且返回移除的项
 - `concat`：将当期数组拷贝一份，将传入的任意参数添加至末尾后，返回新数组（不会影响原有数组），如果参数是数组，会展开一级数组
 - `shift`：删除数组的第一项
 - `unshift`：接受任意数量的参数，将其添加到数组开头，返回数组的新长度
@@ -240,11 +270,19 @@ var p = new Person();
 
 - `slice`：接受一个或两个参数，返回从指定下标到结束下标的新数组
 - `splice`
-  两参：删除数组指定下标到结束下标，返回删除的项
+  两参：起始下标，要删除的项数，返回删除的项
   三参以上：起始下标，要删除的项数，要插入的项，splice(2,1,4,6) 删除当前数组的下标2，从下标2开始插入4和6
 - `indexOf`、`lastIndexOf`：查找项在数组中的位置，可传入第二个参数，开始查找的索引位置
 
-### forEach
+<!-------------------------------------------------------------->
+
+- `Array.of`：语义性更强，仅表示传入的参数都转换成数组
+- `copyWithin`：传递三个参数，分别是目标索引，开始索引和结束索引，`['a','b','c','d'].copyWithin(0, 1, 2)`指将1号位的b拷贝覆盖到第0位
+- `fill`：填充数组，传递填充的值，开始填充的位置，结束的位置
+
+
+
+#### forEach
 
 > 没有返回值，只是针对每个元素调用func（没有返回值，如果里面有操作方法就会改变原数组）
 
@@ -256,7 +294,7 @@ array.forEach(function (item, index, array) {
 console.log(array);
 ```
 
-### map
+#### map
 
 > 返回一个新的Array，每个元素为调用func的结果（并没有改变原数组）
 
@@ -268,7 +306,7 @@ var newArray = array.map(function (item, index, array) {
 console.log(newArray);
 ```
 
-### filter
+#### filter
 
 > 返回一个符合func条件的元素数组（并没有改变原数组）
 
@@ -280,7 +318,7 @@ var newArray = array.filter(function (item, index, array) {
 console.log(newArray);
 ```
 
-### some
+#### some
 
 > 返回一个boolean，判断**是否有元素**是否符合func条件(有一个就行)（并没有改变原数组）
 
@@ -293,7 +331,7 @@ var res = array.some(function (item, index, array) {
 console.log(res);
 ```
 
-### every
+every
 
 > 返回一个boolean，判断**每个**元素是否符合func条件（所有都判断）（并没有改变原数组）
 
@@ -665,7 +703,19 @@ function fun() {
 
 > 预解析的时候会触发**变量提升**
 
+### this调用
 
+#### .call
+
+> 第一个参数指this指向的环境，后面允许多个参数传递给function
+
+#### .apply
+
+> 第一个参数指this指向的环境，第二个参数是传递给function的参数数组
+
+#### .bind
+
+> 和call类似，不过返回的是新的包装函数
 
 ## 闭包
 
@@ -744,6 +794,10 @@ f = null;
 - 获取时：`new Date().getHours()`
 - 获取分：`new Date().getMinutes()`
 - 获取秒：`new Date().getSeconds()`
+
+## 存储
+
+![](E:\Note\Web前端\存储.jpg)
 
 ## this关键字
 
@@ -845,6 +899,17 @@ console.log(number);//打印27
 - let 和 const 不允许重复声明(会抛出错误)
 - let 和 const 定义的变量在定义语句之前，如果使用会抛出错误(形成了暂时性死区)，而 var 不会
 
+### 模板字符串
+
+会保留换行和空格，可以实现运算和函数
+
+```javascript
+let str='123'
+let c=`<h1>${str}</h1>`
+```
+
+
+
 ### 箭头函数=>
 
 > 会捕获其所在上下文的 this 值，作为自己的 this 值，箭头函数没有原型属性
@@ -915,6 +980,7 @@ export function f(a){
 
 
 ```javascript
+//使用方式 ↓
 function getP () {
   return new Promise(function (resolve, reject) {
     let sum = 0
@@ -946,6 +1012,55 @@ getP()
 ```
 
 
+
+#### 执行顺序
+
+```javascript
+setTimeout(()=>{
+   console.log(1) 
+},0)
+let a=new Promise((resolve)=>{
+    console.log(2)
+    resolve()
+}).then(()=>{
+   console.log(3) 
+}).then(()=>{
+   console.log(4) 
+})
+console.log(5) 
+
+//2 5 3 4 1 因为promise的executor是一个同步函数，一直在当前的微任务中，执行完毕后才去setTimeout这个宏任务
+```
+
+- `Promise`本身的定义是同步执行的，所以按照顺序，`in promise`会在`sync`前输出
+- `Promise`回调的优先级是高于`setTimeout`等异步操作的，所以`promise resolve`会先于`seTtimeout`输出。浏览器会将`promise callbacks`加入到**同步事件队列的末尾**，而不是**异步事件的队列**
+
+[Eventloop不可怕，可怕的是遇上Promise](https://juejin.im/post/5c9a43175188252d876e5903)
+
+### async，await
+
+- async 函数返回一个 Promise 对象，当async函数执行的时候，一旦遇到 await 就会先返回，等到触发的异步操作完成，再接着执行函数体内后面的语句
+- async 告诉程序这是一个异步，awiat 会暂停执行async中的代码，等待await 表达式后面的结果，跳过async 函数，继续执行后面代码
+- await  操作符用于等待一个Promise 对象，并且返回 Promise 对象的处理结果（成功把resolve 函数参数作为await 表达式的值），如果等待的不是 Promise 对象，则用 Promise.resolve(xx) 转化
+
+
+```javascript
+function say () {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve('hello')
+    }, 1000)
+  })
+}
+
+async function demo () {
+  const v = await say()
+  console.log(v)
+}
+demo()
+```
+
+上述的例子会等到`setTimeout`执行完毕后，才会在打印出`hello`字符串
 
 ### 形参默认值
 
@@ -1026,8 +1141,28 @@ let obj = {
     b: "www",
     c: true
 };
+//对象取值
 let {a, c} = obj;//let {a:num, c:flag} = obj;  为a赋值到新的变量num中
 console.log(a + ' ' + c);
+
+//数组取值
+let [x,y,z]=['1',2,3]
+
+//将数组除了第一项以外都赋值给b
+let [a,...b]=[1,2,3,4,5]
+
+//数组和对象嵌套
+let obj1={s:{n:'1'},n:[1,2,'3','4'],m:[[1]]}
+let {m:[x1],s:{n},n:[,...m2]}=obj1
+console.log(x1,n,m2) //[1]  '1'  [2,'3','4']
+
+//支持默认值
+let {v:a=3}={v:'111'}//a的值是'111'，只有对象的属性值是undefined，默认值才会生效（例如传递function）
+
+//字符串会被转换成数组
+let [x, y, z] = '123456'
+let { length } = '54321'
+console.log(x, y, z, length)
 ```
 
 #### 交换值
@@ -1036,7 +1171,41 @@ console.log(a + ' ' + c);
 [a,b]=[b,a]
 ```
 
+### 扩展运算符
+
+```javascript
+
+//将两个数组进行拼接
+[...[1,2,3],...[4,5,6]]
+
+var obj = { name: 'aa' }
+//将obj对象的属性拷贝
+console.log({ ...obj, id: 1 })
+```
+
+
+
+### Map结构
+
+任何值都可以成为键，
+
+```javascript
+var map=new Map([
+  ['key1','v1'],
+  [{key:123},'v2'],
+  [123,'v3'],
+])
+```
+
+
+
 ### rest参数
 
 > **...args**，Rest就是为解决传入的参数数量不一定， rest parameter(Rest 参数) 本身就是数组，数组的相关的方法都可以用
+
+```javascript
+
+```
+
+
 
