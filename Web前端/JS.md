@@ -331,7 +331,7 @@ var res = array.some(function (item, index, array) {
 console.log(res);
 ```
 
-every
+#### every
 
 > 返回一个boolean，判断**每个**元素是否符合func条件（所有都判断）（并没有改变原数组）
 
