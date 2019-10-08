@@ -674,7 +674,7 @@ div {
 
 - `display:flex`  子元素默认变成伸缩项，当子元素宽度总和大于与容器宽度，默认会平均收缩
 - `justify-content:flex-start`  主轴方向：子元素从父容器起始位置开始排列
-- `justify-content:flex-endt`   主轴方向：子元素从父容器结束位置开始排列
+- `justify-content:flex-end`   主轴方向：子元素从父容器结束位置开始排列
 - `justify-content:center`   主轴方向：子元素从父容器中间位置开始排列
 - `justify-content:space-between`   主轴方向：左右对齐父容器的开始结束位置，中间平分间距
 - `justify-content:space-around`   主轴方向：将多余的空间平均的分配给子元素的两边，像margin的效果

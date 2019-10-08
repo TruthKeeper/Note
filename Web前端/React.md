@@ -339,3 +339,5 @@ class Header extends Component {
 - **componentWillUpdate**在组件接收到新的props或者state但还没有render时被调用。在初始化时不会被调用。
 - **componentDidUpdate** 在组件完成更新后立即调用。在初始化时不会被调用。
 - **componentWillUnmount**在组件从 DOM 中移除之前立刻被调用。
+
+![](F:\Note\Web前端\REACT生命周期.jpg)
