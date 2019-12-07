@@ -524,6 +524,10 @@ new Vue({
 })
 ```
 
+## 数据重置
+
+`Object.assign(this.$data,this.$options.data())`
+
 ## 计算属性
 
 > 在模板中不应该有太复杂的计算逻辑，可以放到计算属性中`<p>message: "{{ reversedMessage}}"</p>`（不需要加引号），和`methods`的区别在于，**计算属性具有缓存性，当依赖于计算属性的属性发生改变时，会响应式的刷新**
