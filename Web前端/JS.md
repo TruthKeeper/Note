@@ -356,6 +356,10 @@ var index = array.findIndex(function (item, index, array) {
 console.log(index);
 ```
 
+### 多维数组展开成一维
+
+- `ary.flat(Infinity)`
+- `JSON.stringify(ary).replace(/(\[|\])/g, '').split(',')`
 
 ## DOM
 
@@ -1209,3 +1213,6 @@ var map=new Map([
 
 
 
+## 宏、微任务
+
+> 在每一个宏任务中定义一个**微任务队列**，当该宏任务执行完成，会检查其中的微任务队列，如果为空则直接执行下一个宏任务，如果不为空，则`依次执行微任务`，执行完成才去执行下一个宏任务
