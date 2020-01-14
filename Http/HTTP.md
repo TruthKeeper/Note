@@ -33,6 +33,11 @@ GET www.baidu.com HTTP 1.1
 
 键值对的形式，常见的有Host，Cache-Control，Connection，Range，User-Agent等等
 
+
+
+- user-agent：浏览器版本信息
+- referer：告诉服务器客户端从哪里来用来防盗链、统计工作
+
 #### 请求体
 
 POST中内容键值对用&拼接，还有文件上传数据等

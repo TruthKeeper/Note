@@ -25,3 +25,19 @@
 - @StringRes、@IntegerRes等 表示指定的资源变量类型
 - @WorkerThread、@UIThread等 表示指定的线程类型
 - @CallSuper、@CheckResult等 表示调用父类的方法和返回校验
+
+### 自定义注解
+
+> 当自定义注解只有一个属性时，且属性名为value时，赋值时value可省略
+
+```java
+public @interface Table {
+    public String value();
+}
+
+@Table("student")
+public class Student {
+	
+}
+```
+
