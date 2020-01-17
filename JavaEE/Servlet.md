@@ -119,3 +119,13 @@ get方式 tomcat已经处理了
 - 获取MIME类型，text/html，image/jpeg
 - 域对象：共享数据（所有request域）
 - 获取文件的真实（服务器）路径
+- web目录下的文件访问：`new File(getServletContext().getRealPath("/a.txt"))`
+- WEB-INF目录下的文件访问：`new File(getServletContext().getRealPath("/WEB-INF/b.txt"))`
+- src目录下的文件访问：`new File(getServletContext().getRealPath("/WEB-INF/classes/c.txt"))`
+
+### 文件下载的需求
+
+- 将超链接的`href`指向`servlet`，并且传递资源名称
+- 向字节输入流中加载文件到内存
+- 指定**response**的响应头，`content-type`指定文件的`mimetype`，`content-disposition`指定`attachment;filename=${文件名}`
+- 中文文件名称问题：需要用url编码，火狐是base64

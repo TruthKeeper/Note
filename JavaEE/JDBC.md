@@ -54,6 +54,56 @@ statement.setXXX(?的位置编号, ?的值);
 
 #### Druid
 
+```java
+public class JDBCUtils {
+    public static DataSource dataSource;
+
+    static {
+        Properties properties = new Properties();
+        try {
+            properties.load(JDBCUtils.class.getClassLoader().getResourceAsStream("druid.properties"));
+            dataSource = DruidDataSourceFactory.createDataSource(properties);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static DataSource getDataSource() {
+        return dataSource;
+    }
+}
+```
+
+```properties
+driverClassName=com.mysql.cj.jdbc.Driver
+url=jdbc:mysql://localhost:3306/db1?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+username=root
+password=123456
+initialSize=5
+maxActive=10
+maxWait=5000
+
+```
+
+```java
+public class UserDao {
+    private final JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
+
+    public User login(String username, String password) {
+        String sql = "select * from user where username = ? and password = ?";
+        List<Map<String, Object>> list = template.queryForList(sql, username, password);
+        if (list == null || list.isEmpty()) {
+            return null;
+        } else {
+            return JSON.parseObject(JSON.toJSONString(list.get(0)), User.class);
+        }
+    }
+}
+```
+
+
+
 ### Spring JDBC
 
 >Spring 框架对于JDBC的封装
